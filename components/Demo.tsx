@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Component() {
   return (
-    <section className="py-12 bg-gray-50 dark:bg-gray-900">
+    <section className="py-40 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">

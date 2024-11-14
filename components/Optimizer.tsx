@@ -79,10 +79,10 @@ export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
   };
 
   return (
-    <div className="py-12 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg p-8 space-y-6">
+    <div className="py-12 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg p-8 ">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block font-medium text-gray-700 mb-2">
             Job Description
           </label>
           <textarea
@@ -97,17 +97,17 @@ export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block font-medium text-gray-700 mb-2">
             Upload Resume (PDF)
           </label>
           <input
             type="file"
             accept=".pdf"
             onChange={handleFileSelect}
-            className="block w-full text-sm text-gray-500
+            className="block w-full text-gray-500
                     file:mr-4 file:py-2.5 file:px-4
                     file:rounded-md file:border-0
-                    file:text-sm file:font-semibold
+                    file:font-semibold
                     file:bg-blue-50 file:text-blue-700
                     hover:file:bg-blue-100 
                     border border-gray-300 rounded-md"
@@ -133,7 +133,7 @@ export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
 
         {error && (
           <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-red-600 text-sm">{error}</p>
+            <p className="text-red-600">{error}</p>
           </div>
         )}
       </div>

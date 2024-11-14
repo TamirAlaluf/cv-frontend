@@ -1,7 +1,12 @@
+import Link from "next/link";
+
 export default function NavBar() {
   return (
     <nav className="flex justify-between items-center px-8 py-4 shadow-md fixed w-full top-0 z-50 bg-white">
-      <div className="text-xl font-bold">ResumeOPT</div>
+      {/* <div className="text-xl">ResumeOPT</div> */}
+      <Link href="/">
+        <div className="text-xl">ResumeOPT</div>
+      </Link>
       <div className="space-x-4">
         <a
           href="#demo"
@@ -21,12 +26,12 @@ export default function NavBar() {
         >
           Pricing
         </a>
-        <a
-          href="#login"
+        <Link
+          href="/login"
           className="px-4 py-2 text-white bg-[#1468EF] rounded-md hover:bg-opacity-80 transition-colors"
         >
           Login
-        </a>
+        </Link>
       </div>
     </nav>
   );

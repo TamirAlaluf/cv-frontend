@@ -48,18 +48,10 @@ export default function Component() {
   );
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4 space-y-6">
+    <div className="w-full max-w-3xl mx-auto p-4 py-20">
       <h2 className="text-3xl font-bold text-center mb-6">
         Frequently Asked Questions
       </h2>
-
-      <Input
-        type="search"
-        placeholder="Search FAQs..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-6"
-      />
 
       <Accordion type="single" collapsible className="w-full">
         {filteredFaqs.map((faq, index) => (

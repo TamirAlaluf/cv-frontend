@@ -8,33 +8,32 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
 // FAQ data
 const faqs = [
   {
-    question: "What is v0?",
+    question: "What is this app and how does it work?",
     answer:
-      "v0 is an advanced AI coding assistant created by Vercel. It's designed to emulate the world's most proficient developers and provide clear, efficient, and innovative coding solutions.",
+      "Our app helps job seekers optimize their CVs for Applicant Tracking Systems (ATS). You upload your CV and the job description, and our app generates a new version of your CV with relevant keywords inserted in a hidden format, improving its chances of passing ATS filters and getting noticed by recruiters.",
   },
   {
-    question: "What programming languages does v0 support?",
+    question: "Why is using keywords important for my CV?",
     answer:
-      "v0 has knowledge spanning various programming languages, frameworks, and best practices, with a particular emphasis on React, Next.js App Router, and modern web development.",
+      "ATS software scans resumes for specific keywords that match the job description. Including relevant keywords helps ensure your CV gets past these filters and reaches the hiring team.",
   },
   {
-    question: "Can v0 generate complete code snippets?",
+    question: "Will the keywords be visible to anyone reviewing my CV",
     answer:
-      "Yes, v0 can generate complete, functional code snippets that can be copied and pasted directly into a project. It focuses on writing full implementations rather than partial code or placeholders.",
+      "No. The keywords are inserted in a hidden part of the document (invisible text or other non-obtrusive methods). They won’t be visible to human readers but will be detected by ATS systems.",
   },
   {
-    question: "Does v0 support accessibility features?",
+    question: "How do you determine which keywords to add to my CV?",
     answer:
-      "v0 implements accessibility best practices, including the use of semantic HTML elements, proper ARIA roles and attributes, and considerations for screen readers.",
+      "We use OpenAI's advanced language model to analyze the job description you provide and extract the most relevant keywords. These keywords are then automatically added to your CV in a hidden format, ensuring they don't interfere with the visual presentation of your resume but still make it ATS-friendly.",
   },
   {
-    question: "Can v0 create diagrams or visualizations?",
+    question: "How do I get started",
     answer:
-      "Yes, v0 can create diagrams using the Mermaid diagramming language to help illustrate complex concepts, processes, or architectures.",
+      "Simply sign up, upload your CV and job description, and our system will automatically insert relevant keywords. Within minutes, you’ll have a new, ATS-optimized version of your CV ready for download.",
   },
 ];
 
@@ -48,7 +47,7 @@ export default function Component() {
   );
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4 py-20">
+    <div className="w-full max-w-3xl mx-auto p-4 py-20" id="faq">
       <h2 className="text-3xl font-bold text-center mb-6">
         Frequently Asked Questions
       </h2>

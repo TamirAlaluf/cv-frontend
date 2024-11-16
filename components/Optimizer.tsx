@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 
 export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
+  const { user } = useUser();
   const [jobDescription, setJobDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +82,16 @@ export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
 
   return (
     <div className="py-12 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg p-8 ">
+      {user?.username && (
+        <div className="pb-4">
+          <div className="text-lg font-semibold text-gray-800">
+            Hello {user.username}
+          </div>
+          <div>
+            <p>You have 10 times left to use this tool for free.</p>
+          </div>
+        </div>
+      )}
       <div className="space-y-4">
         <div>
           <label className="block font-medium text-gray-700 mb-2">

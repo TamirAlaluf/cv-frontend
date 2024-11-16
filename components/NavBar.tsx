@@ -1,37 +1,52 @@
+"use client";
+
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 
 export default function NavBar() {
+  const { isSignedIn } = useAuth();
+  const { signOut } = useClerk();
   return (
     <nav className="flex justify-between items-center px-8 py-4 shadow-md fixed w-full top-0 z-50 bg-white">
-      {/* <div className="text-xl">ResumeOPT</div> */}
-      <Link href="/">
-        <div className="text-xl">ResumeOPT</div>
+      <Link href="/#main">
+        <div className="text-xl">ResuMate</div>
       </Link>
       <div className="space-x-4">
         <a
-          href="#demo"
+          href="/#demo"
           className="px-4 py-2 hover:text-gray-200 transition-colors"
         >
           Demo
         </a>
         <a
-          href="#faq"
+          href="/#faq"
           className="px-4 py-2 hover:text-gray-200 transition-colors"
         >
           FAQ
         </a>
         <a
-          href="#pricing"
+          href="/#pricing"
           className="px-4 py-2 hover:text-gray-200 transition-colors"
         >
           Pricing
         </a>
-        <Link
-          href="/login"
-          className="px-4 py-2 text-white bg-[#1468EF] rounded-md hover:bg-opacity-80 transition-colors"
-        >
-          Login
-        </Link>
+        {!isSignedIn && (
+          <Link
+            href="/sign-in"
+            className="inline-flex items-center px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-opacity-80 transition-colors"
+          >
+            Login
+          </Link>
+        )}
+        {isSignedIn && (
+          <button
+            onClick={() => signOut()}
+            className="inline-flex items-center px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-opacity-80 transition-colors"
+          >
+            Logout
+          </button>
+        )}
       </div>
     </nav>
   );

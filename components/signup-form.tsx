@@ -11,17 +11,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginForm() {
+export function SignUpForm() {
   return (
     <Card className="mx-auto max-w-md p-4 sm:w-[25rem] md:w-[25rem] lg:w-[30rem]">
       <CardHeader>
-        <CardTitle className="text-3xl">Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
+        <CardTitle className="text-3xl">Sign Up</CardTitle>
+        <CardDescription>Create an account to get started</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="John Doe"
+              required
+              className="h-12 text-lg"
+            />
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -33,15 +41,7 @@ export function LoginForm() {
             />
           </div>
           <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link
-                href="#"
-                className="ml-auto inline-block text-base underline text-muted-foreground text-sm"
-              >
-                Forgot your password?
-              </Link>
-            </div>
+            <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
@@ -49,17 +49,26 @@ export function LoginForm() {
               className="h-12 text-lg"
             />
           </div>
+          <div className="grid gap-2">
+            <Label htmlFor="confirm-password">Confirm Password</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              required
+              className="h-12 text-lg"
+            />
+          </div>
           <Button type="submit" className="w-full h-12 text-md">
-            Login
+            Sign Up
           </Button>
           <Button variant="outline" className="w-full h-12 text-md">
-            Login with Google
+            Sign Up with Google
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="underline">
-            Sign up
+          Already have an account?{" "}
+          <Link href="/login" className="underline">
+            Login
           </Link>
         </div>
       </CardContent>

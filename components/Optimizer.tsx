@@ -1,7 +1,26 @@
+"use client";
+
 import { useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Upload } from "lucide-react";
 
-export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
+export default function ResumeOptimizer({
+  LAMBDA_URL = "",
+}: {
+  LAMBDA_URL?: string;
+}) {
   const { user } = useUser();
   const [jobDescription, setJobDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +87,7 @@ export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
 
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = "resume.pdf";
+      link.download = "optimized_resume.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -81,74 +100,86 @@ export default function Optimizer({ LAMBDA_URL }: { LAMBDA_URL: string }) {
   };
 
   return (
-    <div className="py-12 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg p-8 ">
-      {user?.username && (
-        <div className="pb-4">
-          <div className="text-lg font-semibold text-gray-800">
-            Hello {user.username}
+    <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900 dark:to-cyan-900">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+          Resume Optimizer
+        </CardTitle>
+        {user?.username && (
+          <div className="text-sm text-blue-600 dark:text-blue-300">
+            Hello {user.username}, you have 10 free optimizations left.
           </div>
-          <div>
-            <p>You have 10 times left to use this tool for free.</p>
-          </div>
-        </div>
-      )}
-      <div className="space-y-4">
-        <div>
-          <label className="block font-medium text-gray-700 mb-2">
+        )}
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <Label
+            htmlFor="job-description"
+            className="text-blue-700 dark:text-blue-300"
+          >
             Job Description
-          </label>
-          <textarea
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 
-                    focus:ring-blue-500 focus:border-blue-500 transition-all
-                    text-gray-800 placeholder-gray-400"
-            rows={6}
+          </Label>
+          <Textarea
+            id="job-description"
+            placeholder="Paste the job description here..."
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Paste job description here..."
+            rows={6}
+            className="resize-none bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
           />
         </div>
-
-        <div>
-          <label className="block font-medium text-gray-700 mb-2">
+        <div className="space-y-2">
+          <Label
+            htmlFor="resume-upload"
+            className="text-blue-700 dark:text-blue-300"
+          >
             Upload Resume (PDF)
-          </label>
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleFileSelect}
-            className="block w-full text-gray-500
-                    file:mr-4 file:py-2.5 file:px-4
-                    file:rounded-md file:border-0
-                    file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100 
-                    border border-gray-300 rounded-md"
-          />
+          </Label>
+          <div className="flex items-center space-x-2">
+            <div className="relative flex-grow">
+              <Input
+                id="resume-upload"
+                type="file"
+                accept=".pdf"
+                onChange={handleFileSelect}
+                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+              />
+              <div className="flex items-center justify-between px-4 py-2 border border-blue-200 dark:border-blue-700 rounded-md bg-white/50 dark:bg-blue-800/50 text-blue-700 dark:text-blue-300">
+                <span className="truncate">
+                  {selectedFile ? selectedFile.name : "Choose a PDF file"}
+                </span>
+                <Upload className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+              </div>
+            </div>
+          </div>
         </div>
-
-        <button
+        {error && (
+          <Alert
+            variant="destructive"
+            className="bg-red-100 dark:bg-red-900 border-red-200 dark:border-red-700"
+          >
+            <AlertDescription className="text-red-700 dark:text-red-300">
+              {error}
+            </AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
+      <CardFooter>
+        <Button
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-700 dark:hover:bg-blue-600"
           onClick={handleSubmit}
-          disabled={isLoading}
-          className="w-full py-3 px-4 bg-[#1468EF] text-white rounded-md
-                  hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed
-                  transition-colors duration-200 font-medium shadow-sm"
+          disabled={isLoading || !jobDescription || !selectedFile}
         >
           {isLoading ? (
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-5 h-5 border-t-2 border-white rounded-full animate-spin" />
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Optimizing...
-            </div>
+            </>
           ) : (
             "Optimize Resume"
           )}
-        </button>
-
-        {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-red-600">{error}</p>
-          </div>
-        )}
-      </div>
-    </div>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

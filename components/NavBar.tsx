@@ -1,76 +1,114 @@
 "use client";
 
-import { useState } from "react";
+import * as React from "react";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
-import { useClerk } from "@clerk/nextjs";
+import { useAuth, useClerk } from "@clerk/nextjs";
+import { Menu } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function NavBar() {
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const navItems = [
+    { href: "/#demo", label: "Demo" },
+    { href: "/#faq", label: "FAQ" },
+    { href: "/#pricing", label: "Pricing" },
+  ];
+
+  const NavItems = React.forwardRef<
+    React.ElementRef<"a">,
+    React.ComponentPropsWithoutRef<"a">
+  >(({ className, title, children, ...props }, ref) => {
+    return (
+      <NavigationMenuLink asChild>
+        <a ref={ref} className={navigationMenuTriggerStyle()} {...props}>
+          {children}
+        </a>
+      </NavigationMenuLink>
+    );
+  });
+  NavItems.displayName = "NavItems";
 
   return (
-    <nav className="flex justify-between items-center px-8 py-4 shadow-md fixed w-full top-0 z-50 bg-white">
-      {/* Logo */}
-      <Link href="/#main">
-        <div className="text-xl">ResuMate</div>
+    <nav className="flex justify-between items-center px-8 py-4 shadow-md fixed w-full top-0 z-50 bg-background">
+      <Link href="/#main" className="text-xl font-bold">
+        ResuMate
       </Link>
 
-      {/* Hamburger Menu Icon */}
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="block md:hidden focus:outline-none"
-      >
-        <span className="sr-only">Toggle menu</span>
-        <div className="space-y-2">
-          <span className="block w-8 h-1 bg-gray-800"></span>
-          <span className="block w-8 h-1 bg-gray-800"></span>
-          <span className="block w-8 h-1 bg-gray-800"></span>
-        </div>
-      </button>
+      <div className="hidden md:flex items-center space-x-4">
+        <NavigationMenu>
+          <NavigationMenuList>
+            {navItems.map((item) => (
+              <NavigationMenuItem key={item.href}>
+                <NavItems href={item.href}>{item.label}</NavItems>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
 
-      {/* Links */}
-      <div
-        className={`${
-          menuOpen ? "block" : "hidden"
-        } absolute top-16 left-0 w-full bg-white md:static md:flex md:items-center md:space-x-4 md:w-auto`}
-      >
-        <Link
-          href="/#demo"
-          className="block px-4 py-2 hover:text-gray-800 transition-colors md:inline"
-        >
-          Demo
-        </Link>
-        <Link
-          href="/#faq"
-          className="block px-4 py-2 hover:text-gray-800 transition-colors md:inline"
-        >
-          FAQ
-        </Link>
-        <Link
-          href="/#pricing"
-          className="block px-4 py-2 hover:text-gray-800 transition-colors md:inline"
-        >
-          Pricing
-        </Link>
         {!isSignedIn && (
-          <Link
-            href="/sign-in"
-            className="block px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-opacity-80 transition-colors md:inline"
-          >
-            Login
-          </Link>
+          <Button asChild variant="default">
+            <Link href="/sign-in">Login</Link>
+          </Button>
         )}
         {isSignedIn && (
-          <button
-            onClick={() => signOut()}
-            className="block px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-opacity-80 transition-colors md:inline"
-          >
+          <Button variant="default" onClick={() => signOut()}>
             Logout
-          </button>
+          </Button>
         )}
       </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild className="md:hidden">
+          <Button variant="outline" size="icon">
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="right">
+          <nav className="flex flex-col space-y-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-lg font-medium"
+                onClick={() => setIsOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+            {!isSignedIn && (
+              <Button asChild variant="default">
+                <Link href="/sign-in" onClick={() => setIsOpen(false)}>
+                  Login
+                </Link>
+              </Button>
+            )}
+            {isSignedIn && (
+              <Button
+                variant="default"
+                onClick={() => {
+                  signOut();
+                  setIsOpen(false);
+                }}
+              >
+                Logout
+              </Button>
+            )}
+          </nav>
+        </SheetContent>
+      </Sheet>
     </nav>
   );
 }

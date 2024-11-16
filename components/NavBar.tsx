@@ -13,24 +13,24 @@ export default function NavBar() {
         <div className="text-xl">ResuMate</div>
       </Link>
       <div className="space-x-4">
-        <a
+        <Link
           href="/#demo"
           className="px-4 py-2 hover:text-gray-200 transition-colors"
         >
           Demo
-        </a>
-        <a
+        </Link>
+        <Link
           href="/#faq"
           className="px-4 py-2 hover:text-gray-200 transition-colors"
         >
           FAQ
-        </a>
-        <a
+        </Link>
+        <Link
           href="/#pricing"
           className="px-4 py-2 hover:text-gray-200 transition-colors"
         >
           Pricing
-        </a>
+        </Link>
         {!isSignedIn && (
           <Link
             href="/sign-in"

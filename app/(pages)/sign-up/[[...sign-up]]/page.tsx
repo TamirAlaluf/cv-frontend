@@ -1,5 +1,4 @@
 import NavBar from "@/components/NavBar";
-import { SignUpForm } from "@/components/signup-form";
 import { SignUp } from "@clerk/nextjs";
 
 export default function Signup() {

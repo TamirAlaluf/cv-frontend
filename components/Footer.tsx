@@ -2,12 +2,13 @@ import { Facebook, Instagram, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 export default function Footer() {
   return (
     <footer className="bg-background text-foreground">
       <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 lg:grid-cols-3">
           <div>
             <h2 className="mb-6 text-sm font-semibold uppercase">Company</h2>
             <ul className="text-muted-foreground">
@@ -18,39 +19,7 @@ export default function Footer() {
               </li>
               <li className="mb-4">
                 <a href="#" className="hover:underline">
-                  Careers
-                </a>
-              </li>
-              <li className="mb-4">
-                <a href="#" className="hover:underline">
-                  Brand Center
-                </a>
-              </li>
-              <li className="mb-4">
-                <a href="#" className="hover:underline">
                   Blog
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h2 className="mb-6 text-sm font-semibold uppercase">
-              Help center
-            </h2>
-            <ul className="text-muted-foreground">
-              <li className="mb-4">
-                <a href="#" className="hover:underline">
-                  Discord Server
-                </a>
-              </li>
-              <li className="mb-4">
-                <a href="#" className="hover:underline">
-                  Twitter
-                </a>
-              </li>
-              <li className="mb-4">
-                <a href="#" className="hover:underline">
-                  Facebook
                 </a>
               </li>
               <li className="mb-4">
@@ -60,6 +29,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
           <div>
             <h2 className="mb-6 text-sm font-semibold uppercase">Legal</h2>
             <ul className="text-muted-foreground">
@@ -74,9 +44,9 @@ export default function Footer() {
                 </a>
               </li>
               <li className="mb-4">
-                <a href="#" className="hover:underline">
+                <Link href="/tos" className="hover:underline">
                   Terms &amp; Conditions
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

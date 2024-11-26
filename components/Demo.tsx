@@ -2,7 +2,7 @@ import { FileText, Upload, Zap } from "lucide-react";
 
 export default function HowItWorks() {
   return (
-    <section className="py-12 bg-gray-50" id="how-it-works">s
+    <section className="py-12 bg-gray-50" id="how-it-works">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-8">How It Works</h2>
         <div className="grid md:grid-cols-3 gap-8">

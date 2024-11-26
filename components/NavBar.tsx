@@ -21,7 +21,7 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const navItems = [
-    { href: "/#how-it-works", label: "HIW" },
+    { href: "/#how-it-works", label: "Steps" },
     { href: "/#faq", label: "FAQ" },
     { href: "/#pricing", label: "Pricing" },
   ];

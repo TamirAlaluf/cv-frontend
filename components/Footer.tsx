@@ -73,11 +73,7 @@ export default function Footer() {
         <Separator className="my-8" />
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="text-sm text-muted-foreground sm:text-center">
-            © 2023{" "}
-            <a href="#" className="hover:underline">
-              Your Company™
-            </a>
-            . All Rights Reserved.
+            © 2023 ResuMate . All Rights Reserved.
           </span>
           <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
             <a href="#" className="text-muted-foreground hover:text-foreground">

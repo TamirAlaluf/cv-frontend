@@ -24,6 +24,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "ResuMate",
   description: "A resume builder for developers",
+  icons: {
+    icon: "/favicon.png", // Ensure favicon.ico is in the public folder
+  },
 };
 
 export default function RootLayout({

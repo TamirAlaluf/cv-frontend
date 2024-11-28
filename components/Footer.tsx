@@ -25,11 +25,11 @@ export default function Footer() {
                   Blog
                 </a>
               </li>
-              <li className="mb-4">
-                <a href="#" className="hover:underline">
+              {/* <li className="mb-4">
+                <Link href="/contact" className="hover:underline">
                   Contact Us
-                </a>
-              </li>
+                </Link>
+              </li> */}
             </ul>
           </div>
 

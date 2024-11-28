@@ -22,7 +22,7 @@ export default function ContactUs() {
             Contact Us
           </CardTitle>
           <CardDescription className="text-center">
-            We'd love to hear from you. Get in touch with us using the form
+            We&apos;d love to hear from you. Get in touch with us using the form
             below or our contact information.
           </CardDescription>
         </CardHeader>

@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Component() {
   return (
-    <div className="container mx-auto py-10 pt-20">
+    <div className="container mx-auto py-10 pt-20 h-screen">
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center">

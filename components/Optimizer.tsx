@@ -34,69 +34,70 @@ export default function ResumeOptimizer({
   };
 
   const handleSubmit = async () => {
-    if (!selectedFile) {
-      setError("Please select a PDF file");
-      return;
-    }
-    if (!jobDescription) {
-      setError("Please enter a job description");
-      return;
-    }
+    throw new Error("Failed to optimize resume"); // shut down the server
+    // if (!selectedFile) {
+    //   setError("Please select a PDF file");
+    //   return;
+    // }
+    // if (!jobDescription) {
+    //   setError("Please enter a job description");
+    //   return;
+    // }
 
-    setIsLoading(true);
-    setError(null);
+    // setIsLoading(true);
+    // setError(null);
 
-    try {
-      // Convert PDF to base64
-      const base64 = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result as string;
-          resolve(base64String.split(",")[1]);
-        };
-        reader.readAsDataURL(selectedFile);
-      });
+    // try {
+    //   // Convert PDF to base64
+    //   const base64 = await new Promise<string>((resolve) => {
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //       const base64String = reader.result as string;
+    //       resolve(base64String.split(",")[1]);
+    //     };
+    //     reader.readAsDataURL(selectedFile);
+    //   });
 
-      // Send directly to Lambda
-      const response = await fetch(LAMBDA_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          job_description: jobDescription,
-          pdf_base64: base64,
-        }),
-      });
+    //   // Send directly to Lambda
+    //   const response = await fetch(LAMBDA_URL, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       job_description: jobDescription,
+    //       pdf_base64: base64,
+    //     }),
+    //   });
 
-      if (!response.ok) throw new Error("Failed to optimize resume");
+    //   if (!response.ok) throw new Error("Failed to optimize resume");
 
-      const data = await response.json();
+    //   const data = await response.json();
 
-      // Convert base64 back to PDF and download
-      const pdfContent = atob(data.pdf_base64);
-      const pdfBlob = new Blob(
-        [
-          new Uint8Array(
-            pdfContent.split("").map((char) => char.charCodeAt(0))
-          ),
-        ],
-        { type: "application/pdf" }
-      );
-      const downloadUrl = URL.createObjectURL(pdfBlob);
+    //   // Convert base64 back to PDF and download
+    //   const pdfContent = atob(data.pdf_base64);
+    //   const pdfBlob = new Blob(
+    //     [
+    //       new Uint8Array(
+    //         pdfContent.split("").map((char) => char.charCodeAt(0))
+    //       ),
+    //     ],
+    //     { type: "application/pdf" }
+    //   );
+    //   const downloadUrl = URL.createObjectURL(pdfBlob);
 
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = "optimized_resume.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(downloadUrl);
-    } catch (err) {
-      setError("Failed to optimize resume. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    //   const link = document.createElement("a");
+    //   link.href = downloadUrl;
+    //   link.download = "optimized_resume.pdf";
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   document.body.removeChild(link);
+    //   URL.revokeObjectURL(downloadUrl);
+    // } catch (err) {
+    //   setError("Failed to optimize resume. Please try again.");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (

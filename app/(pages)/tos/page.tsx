@@ -1,6 +1,114 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+const sections = [
+  {
+    title: "Acceptance of Terms",
+    content:
+      "By registering for or using our services, you confirm that you are at least 14 years old or have the legal capacity to enter into these terms.",
+  },
+  {
+    title: "Services Provided",
+    content:
+      "We provide an app that helps job seekers optimize their CVs for Applicant Tracking Systems (ATS). You upload your CV and the job description, and our app generates a new version of your CV with relevant keywords inserted in a hidden format, improving its chances of passing ATS filters and getting noticed by recruiters.",
+  },
+  {
+    title: "Account Responsibilities",
+    content: (
+      <ul className="list-disc pl-6 space-y-2">
+        <li>
+          You are responsible for maintaining the confidentiality of your
+          account credentials.
+        </li>
+        <li>You agree to provide accurate and up-to-date information.</li>
+        <li>
+          You may not use the service for illegal or unauthorized purposes.
+        </li>
+      </ul>
+    ),
+  },
+  {
+    title: "Pricing and Payment",
+    content: (
+      <ul className="list-disc pl-6 space-y-2">
+        <li>
+          Our subscription plans and pricing are listed on{" "}
+          <a
+            href="https://resumateapp.com/"
+            className="text-blue-500 underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://resumateapp.com/
+          </a>
+          .
+        </li>
+        <li>Payments are processed securely via Paddle.</li>
+        <li>Subscriptions renew automatically unless canceled.</li>
+      </ul>
+    ),
+  },
+  {
+    title: "Refund Policy",
+    content: (
+      <>
+        <p>
+          We offer refunds based on the number of uses you have consumed in your
+          subscription plan. If you have not used any features of the service or
+          have used less than [insert number] uses, you are eligible for a full
+          refund. Refund requests must be submitted within [insert number of
+          days] days from the date of purchase.
+        </p>
+        <p>
+          If you have used more than [insert number] uses, your subscription
+          will be considered non-refundable. Please contact our support team at
+          [support@yourdomain.com] for assistance with any refund inquiries.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "User Conduct",
+    content: (
+      <ul className="list-disc pl-6 space-y-2">
+        <li>Use the service in violation of applicable laws.</li>
+        <li>Attempt to disrupt or hack the platform.</li>
+        <li>Share, sell, or sublicense your account.</li>
+      </ul>
+    ),
+  },
+  {
+    title: "Termination",
+    content:
+      "We reserve the right to terminate your account for violating these terms or for any misuse of our services.",
+  },
+  {
+    title: "Limitation of Liability",
+    content:
+      "ResuMate is not liable for indirect or incidental damages arising from your use of the service.",
+  },
+  {
+    title: "Governing Law",
+    content: "These terms are governed by the laws of Israel.",
+  },
+  {
+    title: "Contact",
+    content: (
+      <p>
+        For questions, contact us at{" "}
+        <a
+          href="mailto:alaluf101@gmail.com"
+          className="text-blue-500 underline"
+        >
+          {" "}
+          alaluf101@gmail.com
+        </a>
+        .
+      </p>
+    ),
+  },
+];
+
 export default function Component() {
   return (
     <div className="container mx-auto py-10 pt-20 h-screen">
@@ -24,119 +132,14 @@ export default function Component() {
                 refrain from using our services.
               </p>
 
-              <section>
-                <h2 className="text-xl font-semibold mb-2">
-                  1. Acceptance of Terms
-                </h2>
-                <p>
-                  By registering for or using our services, you confirm that you
-                  are at least 14 years old or have the legal capacity to enter
-                  into these terms.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">
-                  2. Services Provided
-                </h2>
-                <p>
-                  We provide an app that helps job seekers optimize their CVs
-                  for Applicant Tracking Systems (ATS). You upload your CV and
-                  the job description, and our app generates a new version of
-                  your CV with relevant keywords inserted in a hidden format,
-                  improving its chances of passing ATS filters and getting
-                  noticed by recruiters. The specifics of our services are
-                  detailed on our website at{" "}
-                  <a
-                    href="https://resumateapp.com/"
-                    className="text-blue-500 underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    https://resumateapp.com/
-                  </a>
-                  .
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">
-                  3. Account Responsibilities
-                </h2>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>
-                    You are responsible for maintaining the confidentiality of
-                    your account credentials.
-                  </li>
-                  <li>
-                    You agree to provide accurate and up-to-date information.
-                  </li>
-                  <li>
-                    You may not use the service for illegal or unauthorized
-                    purposes.
-                  </li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">
-                  4. Pricing and Payment
-                </h2>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>
-                    Our subscription plans and pricing are listed on{" "}
-                    <a
-                      href="https://resumateapp.com/"
-                      className="text-blue-500 underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      https://resumateapp.com/
-                    </a>
-                    .
-                  </li>
-                  <li>Payments are processed securely via Paddle.</li>
-                  <li>Subscriptions renew automatically unless canceled.</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">5. User Conduct</h2>
-                <p>You agree not to:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Use the service in violation of applicable laws.</li>
-                  <li>Attempt to disrupt or hack the platform.</li>
-                  <li>Share, sell, or sublicense your account.</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">6. Termination</h2>
-                <p>
-                  We reserve the right to terminate your account for violating
-                  these terms or for any misuse of our services.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">
-                  7. Limitation of Liability
-                </h2>
-                <p>
-                  ResuMate is not liable for indirect or incidental damages
-                  arising from your use of the service.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">8. Governing Law</h2>
-                <p>These terms are governed by the laws of Israel.</p>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold mb-2">9. Contact</h2>
-                <p>For questions, contact us at [support@yourdomain.com].</p>
-              </section>
+              {sections.map((section, index) => (
+                <section key={index}>
+                  <h2 className="text-xl font-semibold mb-2">
+                    {index + 1}. {section.title}
+                  </h2>
+                  <div>{section.content}</div>
+                </section>
+              ))}
             </div>
           </ScrollArea>
         </CardContent>

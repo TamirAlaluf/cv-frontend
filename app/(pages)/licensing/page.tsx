@@ -114,7 +114,14 @@ export default function Component() {
                 <h2 className="text-xl font-semibold mb-2">8. Contact</h2>
                 <p>
                   For questions about this Licensing Agreement, contact us at
-                  [support@yourdomain.com].
+                  <a
+                    href="mailto:alaluf101@gmail.com"
+                    className="text-blue-500 underline"
+                  >
+                    {" "}
+                    alaluf101@gmail.com
+                  </a>
+                  .
                 </p>
               </section>
             </div>

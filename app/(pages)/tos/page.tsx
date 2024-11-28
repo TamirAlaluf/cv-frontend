@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Component() {
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 pt-20">
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center">
@@ -11,17 +11,17 @@ export default function Component() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[600px] w-full pr-4">
+          <ScrollArea className="h-[500px] w-full pr-4">
             <div className="space-y-6">
               <p className="text-sm text-muted-foreground">
-                Effective Date: [Insert Date]
+                Effective Date: November 28, 2024
               </p>
 
               <p>
-                Welcome to [Your SaaS Name]! These Terms of Service govern your
-                access to and use of our platform, website, and services. By
-                using our services, you agree to these terms. If you do not
-                agree, please refrain from using our services.
+                Welcome to ResuMate! These Terms of Service govern your access
+                to and use of our platform, website, and services. By using our
+                services, you agree to these terms. If you do not agree, please
+                refrain from using our services.
               </p>
 
               <section>
@@ -30,7 +30,7 @@ export default function Component() {
                 </h2>
                 <p>
                   By registering for or using our services, you confirm that you
-                  are at least 18 years old or have the legal capacity to enter
+                  are at least 14 years old or have the legal capacity to enter
                   into these terms.
                 </p>
               </section>
@@ -40,9 +40,22 @@ export default function Component() {
                   2. Services Provided
                 </h2>
                 <p>
-                  We provide [brief description of your SaaS]. The specifics of
-                  our services are detailed on our website at [insert website
-                  URL].
+                  We provide an app that helps job seekers optimize their CVs
+                  for Applicant Tracking Systems (ATS). You upload your CV and
+                  the job description, and our app generates a new version of
+                  your CV with relevant keywords inserted in a hidden format,
+                  improving its chances of passing ATS filters and getting
+                  noticed by recruiters. The specifics of our services are
+                  detailed on our website at{" "}
+                  <a
+                    href="https://resumateapp.com/"
+                    className="text-blue-500 underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://resumateapp.com/
+                  </a>
+                  .
                 </p>
               </section>
 
@@ -71,13 +84,18 @@ export default function Component() {
                 </h2>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>
-                    Our subscription plans and pricing are listed on [insert
-                    link].
+                    Our subscription plans and pricing are listed on{" "}
+                    <a
+                      href="https://resumateapp.com/"
+                      className="text-blue-500 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      https://resumateapp.com/
+                    </a>
+                    .
                   </li>
-                  <li>
-                    Payments are processed securely via [insert payment
-                    processor].
-                  </li>
+                  <li>Payments are processed securely via Paddle.</li>
                   <li>Subscriptions renew automatically unless canceled.</li>
                 </ul>
               </section>
@@ -105,16 +123,14 @@ export default function Component() {
                   7. Limitation of Liability
                 </h2>
                 <p>
-                  [Your SaaS Name] is not liable for indirect or incidental
-                  damages arising from your use of the service.
+                  ResuMate is not liable for indirect or incidental damages
+                  arising from your use of the service.
                 </p>
               </section>
 
               <section>
                 <h2 className="text-xl font-semibold mb-2">8. Governing Law</h2>
-                <p>
-                  These terms are governed by the laws of [Your Country/State].
-                </p>
+                <p>These terms are governed by the laws of Israel.</p>
               </section>
 
               <section>

@@ -6,7 +6,10 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-background text-foreground">
+    <footer
+      className="bg-background text-foreground border-t border-gray-50"
+      style={{ borderColor: "#E6E6E6", borderWidth: "1px" }}
+    >
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 lg:grid-cols-3">
           <div>
@@ -34,14 +37,14 @@ export default function Footer() {
             <h2 className="mb-6 text-sm font-semibold uppercase">Legal</h2>
             <ul className="text-muted-foreground">
               <li className="mb-4">
-                <a href="#" className="hover:underline">
+                <Link href="/privacy-policy" className="hover:underline">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li className="mb-4">
-                <a href="#" className="hover:underline">
+                <Link href="/licensing" className="hover:underline">
                   Licensing
-                </a>
+                </Link>
               </li>
               <li className="mb-4">
                 <Link href="/tos" className="hover:underline">

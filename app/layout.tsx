@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -37,7 +39,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={roboto.className}>
       <body>
-        <ClerkProvider dynamic>{children}</ClerkProvider>
+        <ClerkProvider dynamic>
+          <NavBar />
+          {children}
+          <Footer />
+        </ClerkProvider>
       </body>
     </html>
   );

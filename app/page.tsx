@@ -1,5 +1,4 @@
 "use client";
-import NavBar from "../components/NavBar";
 import Demo from "../components/Demo";
 import FAQ from "../components/FAQ";
 import Pricing from "../components/Pricing";
@@ -11,12 +10,10 @@ const LAMBDA_URL = "https://i3wu518pne.execute-api.us-east-1.amazonaws.com/";
 export default function Home() {
   return (
     <>
-      <NavBar />
       <Main LAMBDA_URL={LAMBDA_URL} />
       <Demo />
       <FAQ />
       <Pricing />
-      <Footer />
     </>
   );
 }

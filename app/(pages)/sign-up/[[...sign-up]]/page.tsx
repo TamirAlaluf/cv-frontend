@@ -38,8 +38,12 @@ export default function Signup() {
 
           // Redirect after successful save
           router.push("/");
-        } catch (error: any) {
-          console.error("Error saving user details:", error.message);
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            console.error("Error saving user details:", error.message);
+          } else {
+            console.error("An unknown error occurred");
+          }
         }
       }
     };

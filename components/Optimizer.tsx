@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
+import { useUser, useClerk } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -21,11 +21,33 @@ export default function ResumeOptimizer({
 }: {
   LAMBDA_URL?: string;
 }) {
+  const clerk = useClerk();
   const { user } = useUser();
   const [jobDescription, setJobDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [usageLeft, setUsageLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUsageLeft = async () => {
+      if (user?.emailAddresses?.[0]?.emailAddress) {
+        try {
+          const response = await fetch(
+            `/api/users?email=${user?.emailAddresses?.[0]?.emailAddress}`
+          );
+          if (response.ok) {
+            const userData = await response.json();
+            setUsageLeft(userData?.number_usage_left ?? 0);
+          }
+        } catch (error) {
+          console.error("Failed to fetch usage count:", error);
+        }
+      }
+    };
+
+    fetchUsageLeft();
+  }, [user?.emailAddresses?.[0]?.emailAddress]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -34,70 +56,105 @@ export default function ResumeOptimizer({
   };
 
   const handleSubmit = async () => {
-    throw new Error("Failed to optimize resume"); // shut down the server
-    // if (!selectedFile) {
-    //   setError("Please select a PDF file");
-    //   return;
-    // }
-    // if (!jobDescription) {
-    //   setError("Please enter a job description");
-    //   return;
-    // }
+    // throw new Error("Failed to optimize resume"); // shut down the server
+    if (usageLeft === 0) {
+      setError("You have reached the limit of usage. Please upgrade.");
+      return;
+    }
+    if (!selectedFile) {
+      setError("Please select a PDF file");
+      return;
+    }
+    if (!jobDescription) {
+      setError("Please enter a job description");
+      return;
+    }
+    if (!user) {
+      setIsLoading(true);
+      // Simulate a brief loading state
+      setTimeout(() => {
+        // Redirect to sign-in page
+        clerk.redirectToSignIn();
+      }, 1000); // 1 second delay
+      return;
+    }
 
-    // setIsLoading(true);
-    // setError(null);
+    setIsLoading(true);
+    setError(null);
 
-    // try {
-    //   // Convert PDF to base64
-    //   const base64 = await new Promise<string>((resolve) => {
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //       const base64String = reader.result as string;
-    //       resolve(base64String.split(",")[1]);
-    //     };
-    //     reader.readAsDataURL(selectedFile);
-    //   });
+    try {
+      // Convert PDF to base64
+      const base64 = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result as string;
+          resolve(base64String.split(",")[1]);
+        };
+        reader.readAsDataURL(selectedFile);
+      });
 
-    //   // Send directly to Lambda
-    //   const response = await fetch(LAMBDA_URL, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       job_description: jobDescription,
-    //       pdf_base64: base64,
-    //     }),
-    //   });
+      // Send directly to Lambda
+      const response = await fetch(LAMBDA_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          job_description: jobDescription,
+          pdf_base64: base64,
+        }),
+      });
 
-    //   if (!response.ok) throw new Error("Failed to optimize resume");
+      if (!response.ok) throw new Error("Failed to optimize resume");
 
-    //   const data = await response.json();
+      const data = await response.json();
 
-    //   // Convert base64 back to PDF and download
-    //   const pdfContent = atob(data.pdf_base64);
-    //   const pdfBlob = new Blob(
-    //     [
-    //       new Uint8Array(
-    //         pdfContent.split("").map((char) => char.charCodeAt(0))
-    //       ),
-    //     ],
-    //     { type: "application/pdf" }
-    //   );
-    //   const downloadUrl = URL.createObjectURL(pdfBlob);
+      // Convert base64 back to PDF and download
+      const pdfContent = atob(data.pdf_base64);
+      const pdfBlob = new Blob(
+        [
+          new Uint8Array(
+            pdfContent.split("").map((char) => char.charCodeAt(0))
+          ),
+        ],
+        { type: "application/pdf" }
+      );
+      const downloadUrl = URL.createObjectURL(pdfBlob);
 
-    //   const link = document.createElement("a");
-    //   link.href = downloadUrl;
-    //   link.download = "optimized_resume.pdf";
-    //   document.body.appendChild(link);
-    //   link.click();
-    //   document.body.removeChild(link);
-    //   URL.revokeObjectURL(downloadUrl);
-    // } catch (err) {
-    //   setError("Failed to optimize resume. Please try again.");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = "optimized_resume.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(downloadUrl);
+
+      // Update usage count after successful optimization
+      await fetch("/api/updateUsage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user?.emailAddresses?.[0]?.emailAddress,
+        }),
+      });
+
+      await fetch("/api/updateUsage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user?.emailAddresses?.[0]?.emailAddress,
+        }),
+      });
+      setUsageLeft((prev) => (prev ? prev - 1 : 0));
+    } catch (err) {
+      setError("Failed to optimize resume. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -108,7 +165,8 @@ export default function ResumeOptimizer({
         </CardTitle>
         {user?.username && (
           <div className="text-sm text-blue-600 dark:text-blue-300">
-            Hello {user.username}, you have 10 free optimizations left.
+            Hello {user.username}, you have {usageLeft ?? "..."} free
+            optimizations left.
           </div>
         )}
       </CardHeader>

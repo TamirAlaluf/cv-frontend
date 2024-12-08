@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
     const users = await prisma.user.findMany();
     return NextResponse.json(users);
   } catch (error) {
+    console.log("Error fetching users:", error);
     return NextResponse.json(
       { error: "Failed to fetch users" },
       { status: 500 }

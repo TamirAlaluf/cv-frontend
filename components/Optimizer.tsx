@@ -129,17 +129,6 @@ export default function ResumeOptimizer({
       document.body.removeChild(link);
       URL.revokeObjectURL(downloadUrl);
 
-      // Update usage count after successful optimization
-      await fetch("/api/updateUsage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user?.emailAddresses?.[0]?.emailAddress,
-        }),
-      });
-
       await fetch("/api/updateUsage", {
         method: "POST",
         headers: {

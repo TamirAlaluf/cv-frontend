@@ -16,7 +16,7 @@ export default function PricingSection() {
       price: "Free",
       description:
         "Individuals looking to optimize a couple of CVs for a specific job application.",
-      features: ["Optimize up to 2 CVs", "Basic keyword"],
+      features: ["Optimize up to 5 CVs", "Basic keyword"],
     },
     {
       name: "Basic",
@@ -24,10 +24,9 @@ export default function PricingSection() {
       description:
         "Job seekers actively applying to multiple jobs or those with multiple CV versions.",
       features: [
-        "Optimize up to 10 CVs",
+        "Optimize up to 15 CVs",
         "Advanced keyword",
         "Priority support",
-        "Core features",
       ],
     },
     {
@@ -36,11 +35,9 @@ export default function PricingSection() {
       description:
         "Frequent job seekers, career coaches, or anyone applying to numerous job listings and needing extensive keyword optimization.",
       features: [
-        "Optimize up to 30 CVs",
+        "Optimize up to 40 CVs",
         "Advanced keyword",
         "Priority support",
-        "Core features",
-        "Email consultation",
         "Access to future features",
       ],
     },

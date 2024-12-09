@@ -97,11 +97,11 @@ const sections = [
       <p>
         For questions, contact us at{" "}
         <a
-          href="mailto:alaluf101@gmail.com"
+          href="mailto:resumateapp@gmail.com"
           className="text-blue-500 underline"
         >
           {" "}
-          alaluf101@gmail.com
+          resumateapp@gmail.com
         </a>
         .
       </p>

@@ -115,11 +115,11 @@ export default function Component() {
                 <p>
                   For questions about this Licensing Agreement, contact us at
                   <a
-                    href="mailto:alaluf101@gmail.com"
+                    href="resumateapp@gmail.com"
                     className="text-blue-500 underline"
                   >
                     {" "}
-                    alaluf101@gmail.com
+                    resumateapp@gmail.com
                   </a>
                   .
                 </p>

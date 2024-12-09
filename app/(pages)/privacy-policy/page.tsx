@@ -97,11 +97,11 @@ export default function Component() {
         <p>
           If you have questions about this policy, contact us at
           <a
-            href="mailto:alaluf101@gmail.com"
+            href="mailto:resumateapp@gmail.com"
             className="text-blue-500 underline"
           >
             {" "}
-            alaluf101@gmail.com
+            resumateapp@gmail.com
           </a>
           .
         </p>

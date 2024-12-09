@@ -23,7 +23,7 @@ export default function Component() {
           </li>
           <li>
             <strong>Add Job Description:</strong> Paste the job description
-            you're targeting.
+            you&apos;re targeting.
           </li>
           <li>
             <strong>AI-Powered Optimization:</strong> Our advanced algorithm
@@ -42,7 +42,7 @@ export default function Component() {
         <p>
           Many qualified candidates never reach human recruiters because of
           Applicant Tracking Systems (ATS). These automated screening tools
-          filter out resumes that don't match specific keywords, often
+          filter out resumes that don&apos;t match specific keywords, often
           overlooking talented professionals.
         </p>
       ),
@@ -91,9 +91,9 @@ export default function Component() {
       title: "Our Commitment",
       content: (
         <p>
-          ResuMate is more than a tool—it's your partner in professional growth.
-          We continuously improve our technology to help you stand out in a
-          competitive job market.
+          ResuMate is more than a tool—it&apos;s your partner in professional
+          growth. We continuously improve our technology to help you stand out
+          in a competitive job market.
         </p>
       ),
     },

@@ -16,9 +16,12 @@ export default function Footer() {
             <h2 className="mb-6 text-sm font-semibold uppercase">Company</h2>
             <ul className="text-muted-foreground">
               <li className="mb-4">
-                <a href="#" className="hover:underline">
+                {/* <a href="#" className="hover:underline">
                   About
-                </a>
+                </a> */}
+                <Link href="/about" className="hover:underline">
+                  About
+                </Link>
               </li>
               <li className="mb-4">
                 <a href="#" className="hover:underline">

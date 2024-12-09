@@ -29,18 +29,35 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log("Body:", body);
-    const { name: username, email: email_addresses } = body.data;
-    console.log("Username:", username);
+    console.log("Webhook Body:", body);
 
+    // Extract email and username
+    const username = body.data?.username || null;
+    const email = body.data?.email_addresses?.[0]?.email_address || null;
+
+    console.log("Extracted Data:", { username, email });
+
+    // Validate extracted values
+    if (!email) {
+      return NextResponse.json(
+        { error: "Email is required but not found in webhook payload" },
+        { status: 400 }
+      );
+    }
+
+    // Save to database
     const user = await prisma.user.create({
-      data: { name: username, email: email_addresses },
+      data: { name: username, email },
     });
+
+    console.log("User created:", user);
 
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
+    console.error("Error processing webhook:", error);
+
     return NextResponse.json(
-      { error: "Failed to create user" },
+      { error: "Failed to process webhook" },
       { status: 500 }
     );
   }

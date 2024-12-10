@@ -12,6 +12,6 @@ model User {
   name             String  
   email            String    @unique
   username         String?  
-  number_usage_left Int      @default(3)
+  number_usage_left Int      @default(10)
   createdAt        DateTime  @default(now())
 }

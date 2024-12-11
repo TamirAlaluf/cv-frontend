@@ -16,6 +16,28 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload } from "lucide-react";
 
+const countTokens = (text: string): number => {
+  // Rough approximation of GPT tokenization
+  // 1. Split on whitespace and punctuation
+  // 2. Count each piece as a token
+  // 3. For longer words, estimate additional tokens (every ~4 characters)
+  const pieces = text
+    .toLowerCase()
+    .split(/[\s,.!?;:()\[\]{}'"\/\\|<>+=\-~`@#$%^&*]+/)
+    .filter(Boolean);
+
+  let tokenCount = 0;
+  for (const piece of pieces) {
+    // Count basic token
+    tokenCount += 1;
+    // Add extra tokens for longer words (every 4 characters after the first 4)
+    if (piece.length > 4) {
+      tokenCount += Math.floor((piece.length - 1) / 4);
+    }
+  }
+  return tokenCount;
+};
+
 export default function ResumeOptimizer({
   LAMBDA_URL = "",
 }: {
@@ -28,6 +50,7 @@ export default function ResumeOptimizer({
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [usageLeft, setUsageLeft] = useState<number | null>(null);
+  const [outputFileName, setOutputFileName] = useState("optimized_resume");
 
   useEffect(() => {
     const fetchUsageLeft = async () => {
@@ -56,6 +79,12 @@ export default function ResumeOptimizer({
   };
 
   const handleSubmit = async () => {
+    const tokens = countTokens(jobDescription);
+    if (tokens > 2000) {
+      setError("Job description must be 2000 tokens or less");
+      return;
+    }
+
     // throw new Error("Failed to optimize resume"); // shut down the server
     if (usageLeft === 0) {
       setError("You have reached the limit of usage. Please upgrade.");
@@ -123,7 +152,7 @@ export default function ResumeOptimizer({
 
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = "optimized_resume.pdf";
+      link.download = `${outputFileName.trim() || "optimized_resume"}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -175,6 +204,9 @@ export default function ResumeOptimizer({
             rows={6}
             className="resize-none bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
           />
+          <div className="text-sm text-blue-600 dark:text-blue-300">
+            {countTokens(jobDescription)}/2000 tokens
+          </div>
         </div>
         <div className="space-y-2">
           <Label
@@ -200,6 +232,22 @@ export default function ResumeOptimizer({
               </div>
             </div>
           </div>
+        </div>
+        <div className="space-y-2">
+          <Label
+            htmlFor="output-filename"
+            className="text-blue-700 dark:text-blue-300"
+          >
+            Output File Name
+          </Label>
+          <Input
+            id="output-filename"
+            type="text"
+            value={outputFileName}
+            onChange={(e) => setOutputFileName(e.target.value)}
+            placeholder="Enter output file name"
+            className="bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
+          />
         </div>
         {error && (
           <Alert

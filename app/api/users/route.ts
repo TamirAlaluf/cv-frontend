@@ -34,8 +34,9 @@ export async function POST(request: NextRequest) {
     // Extract email and username
     const username = body.data?.username || null;
     const email = body.data?.email_addresses?.[0]?.email_address || null;
+    const id = body.data?.id || null;
 
-    console.log("Extracted Data:", { username, email });
+    console.log("Extracted Data:", { username, email, id });
 
     // Validate extracted values
     if (!email) {
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     // Save to database
     const user = await prisma.user.create({
-      data: { name: username, email },
+      data: { name: username, email, clerk_id: id },
     });
 
     console.log("User created:", user);

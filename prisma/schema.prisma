@@ -9,9 +9,10 @@ generator client {
 
 model User {
   id                Int      @id @default(autoincrement())
-  name             String  
-  email            String    @unique
-  username         String?  
-  number_usage_left Int      @default(10)
-  createdAt        DateTime  @default(now())
+  name              String  
+  email             String   @unique
+  username          String?  
+  number_usage_left Int      @default(5)
+  createdAt         DateTime @default(now())
+  clerk_id          String?  
 }

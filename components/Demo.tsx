@@ -1,6 +1,7 @@
 import { FileText, Upload, Zap } from "lucide-react";
 
 export default function HowItWorks() {
+  const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL;
   return (
     <section className="py-12 bg-gray-50" id="how-it-works">
       <div className="container mx-auto px-4">
@@ -21,6 +22,23 @@ export default function HowItWorks() {
             title="Download ATS-Friendly CV"
             description="Receive your enhanced, ATS-optimized CV ready to submit for your dream job application."
           />
+        </div>
+        {/* Video Container */}
+        <div className="max-w-2xl mx-auto mt-12">
+          {" "}
+          {/* Reduced from max-w-3xl */}
+          <div className="relative w-full h-0 pb-[56.25%]">
+            {" "}
+            {/* 16:9 aspect ratio */}
+            <video
+              controls
+              className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+              src={videoUrl}
+              title="How It Works Demo"
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </div>
       </div>
     </section>

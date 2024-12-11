@@ -183,8 +183,8 @@ export default function ResumeOptimizer({
         </CardTitle>
         {user?.username && (
           <div className="text-sm text-blue-600 dark:text-blue-300">
-            Hello {user.username}, you have {usageLeft ?? "..."} free
-            optimizations left.
+            Hello {user.username}, you have {usageLeft ?? "..."} optimizations
+            left.
           </div>
         )}
       </CardHeader>

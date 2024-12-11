@@ -23,7 +23,6 @@ export default function HowItWorks() {
             description="Receive your enhanced, ATS-optimized CV ready to submit for your dream job application."
           />
         </div>
-        {/* Video Container */}
         <div className="max-w-2xl mx-auto mt-12">
           {" "}
           {/* Reduced from max-w-3xl */}

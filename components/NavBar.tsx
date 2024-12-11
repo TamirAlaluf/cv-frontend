@@ -58,12 +58,20 @@ export default function NavBar() {
         </NavigationMenu>
 
         {!isSignedIn && (
-          <Button asChild variant="default">
-            <Link href="/sign-in">Login</Link>
+          <Button
+            asChild
+            variant="default"
+            className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
+          >
+            <Link href="/sign-in">Sign In</Link>
           </Button>
         )}
         {isSignedIn && (
-          <Button variant="default" onClick={() => signOut()}>
+          <Button
+            variant="default"
+            className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
+            onClick={() => signOut()}
+          >
             Logout
           </Button>
         )}
@@ -89,7 +97,11 @@ export default function NavBar() {
               </Link>
             ))}
             {!isSignedIn && (
-              <Button asChild variant="default">
+              <Button
+                asChild
+                variant="default"
+                className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
+              >
                 <Link href="/sign-in" onClick={() => setIsOpen(false)}>
                   Login
                 </Link>
@@ -98,6 +110,7 @@ export default function NavBar() {
             {isSignedIn && (
               <Button
                 variant="default"
+                className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
                 onClick={() => {
                   signOut();
                   setIsOpen(false);

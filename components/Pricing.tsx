@@ -181,9 +181,9 @@ export default function PricingSection() {
           <DialogHeader>
             <DialogTitle>Excited to Get Started?</DialogTitle>
             <DialogDescription>
-              We're thrilled you're interested! We're currently fine-tuning this
+              We&apos;re thrilled you&apos;re interested! We&apos;re currently fine-tuning this
               feature to make it perfect for you. Be among the first to know
-              when it's live!
+              when it&apos;s live!
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="sm:justify-start">

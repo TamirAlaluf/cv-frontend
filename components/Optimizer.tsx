@@ -17,25 +17,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload } from "lucide-react";
 
 const countTokens = (text: string): number => {
-  // Rough approximation of GPT tokenization
-  // 1. Split on whitespace and punctuation
-  // 2. Count each piece as a token
-  // 3. For longer words, estimate additional tokens (every ~4 characters)
-  const pieces = text
-    .toLowerCase()
-    .split(/[\s,.!?;:()\[\]{}'"\/\\|<>+=\-~`@#$%^&*]+/)
-    .filter(Boolean);
-
-  let tokenCount = 0;
-  for (const piece of pieces) {
-    // Count basic token
-    tokenCount += 1;
-    // Add extra tokens for longer words (every 4 characters after the first 4)
-    if (piece.length > 4) {
-      tokenCount += Math.floor((piece.length - 1) / 4);
-    }
-  }
-  return tokenCount;
+  // Count all non-whitespace characters
+  return text.replace(/\s/g, "").length;
 };
 
 export default function ResumeOptimizer({
@@ -79,9 +62,9 @@ export default function ResumeOptimizer({
   };
 
   const handleSubmit = async () => {
-    const tokens = countTokens(jobDescription);
-    if (tokens > 2000) {
-      setError("Job description must be 2000 tokens or less");
+    const chars = countTokens(jobDescription);
+    if (chars > 4000) {
+      setError("Job description must be 4000 characters or less");
       return;
     }
 
@@ -205,7 +188,7 @@ export default function ResumeOptimizer({
             className="resize-none bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
           />
           <div className="text-sm text-blue-600 dark:text-blue-300">
-            {countTokens(jobDescription)}/2000 tokens
+            {countTokens(jobDescription)}/4000 characters
           </div>
         </div>
         <div className="space-y-2">

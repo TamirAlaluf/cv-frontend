@@ -8,11 +8,22 @@ generator client {
 }
 
 model User {
-  id                Int      @id @default(autoincrement())
-  name              String  
-  email             String   @unique
-  username          String?  
-  number_usage_left Int      @default(5)
-  createdAt         DateTime @default(now())
-  clerk_id          String?  
+  id                Int       @id @default(autoincrement())
+  name              String    
+  email             String    @unique
+  username          String?   
+  number_usage_left Int       @default(5)
+  createdAt         DateTime  @default(now())
+  clerk_id          String?   @unique
+
+  feedbacks         Feedback[] // One-to-many relationship
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  userId    String?     // Optional relation to User
+  user      User?    @relation(fields: [userId], references: [clerk_id])
+  email     String?  // Email for anonymous users
+  interested Boolean // Indicates interest level
+  createdAt DateTime @default(now())
 }

@@ -11,7 +11,7 @@ export default function Main({ LAMBDA_URL }: { LAMBDA_URL: string }) {
             >
               The{" "}
               <span className="relative inline-block">
-                <span className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 transform rotate-3 z-[-1]"></span>
+                <span className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-200 dark:from-blue-900 dark:to-cyan-900 transform rotate-3 z-[-1]"></span>
                 <span className="relative text-[#3E2C1C] px-2 py-1 font-bold">
                   Easiest
                 </span>

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,9 +10,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Check } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function PricingSection() {
+  const { user, isLoaded } = useUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+
   const tiers = [
     {
       name: "Trial",
@@ -43,6 +60,70 @@ export default function PricingSection() {
     },
   ];
 
+  const handleGetStarted = () => {
+    if (!user) {
+      router.push("/sign-up"); // Navigate to the signup page
+      return;
+    }
+
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = async () => {
+    setIsModalOpen(false);
+    try {
+      if (user) {
+        const { emailAddresses } = user;
+        const email = emailAddresses[0]?.emailAddress;
+        const response = await fetch("/api/feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            interested: false,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save feedback");
+        }
+      }
+    } catch (error) {
+      console.error("Error saving feedback:", error);
+      // You might want to show an error toast here
+    }
+  };
+
+  const handleKeepMeUpdated = async () => {
+    setIsModalOpen(false);
+
+    try {
+      if (user) {
+        const { emailAddresses } = user;
+        const email = emailAddresses[0]?.emailAddress;
+        const response = await fetch("/api/feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            interested: true,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save feedback");
+        }
+      }
+    } catch (error) {
+      console.error("Error saving feedback:", error);
+      // You might want to show an error toast here
+    }
+  };
+
   return (
     <section className="py-16 bg-gray-50" id="pricing">
       <div className="container mx-auto px-4">
@@ -74,12 +155,51 @@ export default function PricingSection() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Get Started </Button>
+                {tier.name === "Trial" && !user ? (
+                  <Button
+                    className="w-full bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
+                    onClick={handleGetStarted}
+                  >
+                    Get Started
+                  </Button>
+                ) : tier.name !== "Trial" ? (
+                  <Button
+                    className="w-full bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
+                    onClick={handleGetStarted}
+                  >
+                    Get Started
+                  </Button>
+                ) : null}
               </CardFooter>
             </Card>
           ))}
         </div>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excited to Get Started?</DialogTitle>
+            <DialogDescription>
+              We're thrilled you're interested! We're currently fine-tuning this
+              feature to make it perfect for you. Be among the first to know
+              when it's live!
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleKeepMeUpdated}
+            >
+              Yes, Keep Me Updated!
+            </Button>
+            <Button type="button" variant="outline" onClick={handleCloseModal}>
+              No Thanks
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

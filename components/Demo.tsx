@@ -34,6 +34,7 @@ export default function HowItWorks() {
               className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
               src={videoUrl}
               title="How It Works Demo"
+              poster="/image.png"
             >
               Your browser does not support the video tag.
             </video>

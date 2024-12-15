@@ -36,7 +36,7 @@ export default function SolutionSection() {
             Why Choose ResuMate?
           </h2>
           <p className="text-xl text-gray-600">
-            Effortless Optimization for Every Job Application
+            The Easiest Way to Reach Recruiters
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20">

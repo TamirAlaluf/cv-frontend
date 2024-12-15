@@ -4,6 +4,7 @@ import FAQ from "../components/FAQ";
 import Pricing from "../components/Pricing";
 import Main from "../components/Main";
 import ProblemSection from "@/components/Problem";
+import SolutionSection from "@/components/Solution";
 const LAMBDA_URL =
   process.env.NEXT_PUBLIC_LAMBDA_URL || "http://localhost:4000/";
 
@@ -12,6 +13,7 @@ export default function Home() {
     <>
       <Main LAMBDA_URL={LAMBDA_URL} />
       <ProblemSection />
+      <SolutionSection />
       <Demo />
       <FAQ />
       <Pricing />

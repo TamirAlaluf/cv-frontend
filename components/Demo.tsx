@@ -3,7 +3,7 @@ import { FileText, Upload, Zap } from "lucide-react";
 export default function HowItWorks() {
   const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL;
   return (
-    <section className="py-12 bg-gray-50" id="how-it-works">
+    <section className="py-20 bg-gray-50" id="how-it-works">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-8">How It Works</h2>
         <div className="grid md:grid-cols-3 gap-8">
@@ -23,7 +23,7 @@ export default function HowItWorks() {
             description="Receive your enhanced, ATS-optimized CV ready to submit for your dream job application."
           />
         </div>
-        <div className="max-w-2xl mx-auto mt-12">
+        <div className="max-w-2xl mx-auto mt-12 pt-20">
           {" "}
           {/* Reduced from max-w-3xl */}
           <div className="relative w-full h-0 pb-[56.25%]">

@@ -46,7 +46,7 @@ export default function ProblemSection() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left column: Title, subtitle, and problem description */}
           <div>
-            <h2 className="text-4xl font-bold mb-4">I KNOW YOU</h2>
+            <h2 className="text-4xl font-bold mb-4">The Job Search Struggle</h2>
             <p className="text-xl text-gray-600 mb-8">
               You&apos;re not alone in this challenging journey
             </p>

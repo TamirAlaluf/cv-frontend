@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -44,6 +44,7 @@ export default function PricingSection() {
     description: "",
     variant: "default",
   });
+  const [tier, setTier] = useState<string | undefined>(undefined);
   const router = useRouter();
 
   const tiers = [
@@ -91,13 +92,14 @@ export default function PricingSection() {
     }, 5000);
   };
 
-  const handleGetStarted = () => {
+  const handleGetStarted = (tier?: string) => {
     if (!user) {
       router.push("/sign-up"); // Navigate to the signup page
       return;
     }
 
     setIsModalOpen(true);
+    setTier(tier);
   };
 
   const handleCloseModal = async () => {
@@ -114,6 +116,7 @@ export default function PricingSection() {
           body: JSON.stringify({
             email: email,
             interested: false,
+            tier: tier,
           }),
         });
 
@@ -126,8 +129,9 @@ export default function PricingSection() {
           "Thank you for your response. We appreciate your input."
         );
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving feedback:", error);
+
       showToast(
         "Error",
         "Unable to process your feedback. Please try again.",
@@ -151,6 +155,7 @@ export default function PricingSection() {
           body: JSON.stringify({
             email: email,
             interested: true,
+            tier: tier,
           }),
         });
 
@@ -210,14 +215,14 @@ export default function PricingSection() {
                   {tier.name === "Trial" && !user ? (
                     <Button
                       className="w-full bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
-                      onClick={handleGetStarted}
+                      onClick={() => handleGetStarted(tier.name)}
                     >
                       Get Started
                     </Button>
                   ) : tier.name !== "Trial" ? (
                     <Button
                       className="w-full bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
-                      onClick={handleGetStarted}
+                      onClick={() => handleGetStarted(tier.name)}
                     >
                       Get Started
                     </Button>

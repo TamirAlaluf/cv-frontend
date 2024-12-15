@@ -25,5 +25,6 @@ model Feedback {
   user      User?    @relation(fields: [userId], references: [clerk_id])
   email     String?  // Email for anonymous users
   interested Boolean // Indicates interest level
+  tier      String
   createdAt DateTime @default(now())
 }

@@ -129,14 +129,18 @@ export default function PricingSection() {
           "Thank you for your response. We appreciate your input."
         );
       }
-    } catch (error: any) {
-      console.error("Error saving feedback:", error);
-
-      showToast(
-        "Error",
-        "Unable to process your feedback. Please try again.",
-        "destructive"
-      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error saving feedback:", error.message);
+        showToast(
+          "Error",
+          "Unable to process your feedback. Please try again.",
+          "destructive"
+        );
+      } else {
+        console.error("Unknown error occurred:", error);
+        showToast("Error", "An unexpected error occurred.", "destructive");
+      }
     }
   };
 

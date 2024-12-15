@@ -37,7 +37,7 @@ export default function PricingSection() {
     },
     {
       name: "Basic",
-      price: "$15",
+      price: "$5",
       description:
         "Job seekers actively applying to multiple jobs or those with multiple CV versions.",
       features: [
@@ -48,11 +48,11 @@ export default function PricingSection() {
     },
     {
       name: "Recommended",
-      price: "$30",
+      price: "$10",
       description:
         "Frequent job seekers, career coaches, or anyone applying to numerous job listings and needing extensive keyword optimization.",
       features: [
-        "Optimize up to 40 CVs",
+        "Optimize up to 50 CVs",
         "Advanced keyword",
         "Priority support",
         "Access to future features",
@@ -181,9 +181,9 @@ export default function PricingSection() {
           <DialogHeader>
             <DialogTitle>Excited to Get Started?</DialogTitle>
             <DialogDescription>
-              We&apos;re thrilled you&apos;re interested! We&apos;re currently fine-tuning this
-              feature to make it perfect for you. Be among the first to know
-              when it&apos;s live!
+              We&apos;re thrilled you&apos;re interested! We&apos;re currently
+              fine-tuning this feature to make it perfect for you. Be among the
+              first to know when it&apos;s live!
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="sm:justify-start">

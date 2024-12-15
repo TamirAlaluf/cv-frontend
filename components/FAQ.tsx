@@ -13,29 +13,39 @@ import { Twitter, Mail } from "lucide-react";
 // FAQ data
 const faqs = [
   {
-    question: "What is this app and how does it work?",
+    question: "What does the app actually do?",
     answer:
-      "Our app helps job seekers optimize their CVs for Applicant Tracking Systems (ATS). You upload your CV and the job description, and our app generates a new version of your CV with relevant keywords inserted in a hidden format, improving its chances of passing ATS filters and getting noticed by recruiters.",
+      "ResuMate optimizes your CV for ATS by adding hidden keywords tailored to the job description, increasing your chances of passing automated filters.",
   },
   {
-    question: "Why is using keywords important for my CV?",
+    question: "What is ATS?",
     answer:
-      "ATS software scans resumes for specific keywords that match the job description. Including relevant keywords helps ensure your CV gets past these filters and reaches the hiring team.",
+      "ATS stands for Applicant Tracking System, software used by recruiters to filter and rank job applications based on keywords and relevance to the job description.",
   },
   {
-    question: "Will the keywords be visible to anyone reviewing my CV",
+    question: "How do you know what words to put in?",
     answer:
-      "No. The keywords are inserted in a hidden part of the document (invisible text or other non-obtrusive methods). They won't be visible to human readers but will be detected by ATS systems.",
+      "We use OpenAI's fine-tuned API to analyze the job description and extract role-specific keywords. This ensures accurate and tailored optimization for your CV.",
   },
   {
-    question: "How do you determine which keywords to add to my CV?",
+    question: "Can I get a refund?",
     answer:
-      "We use OpenAI's advanced language model to analyze the job description you provide and extract the most relevant keywords. These keywords are then automatically added to your CV in a hidden format, ensuring they don't interfere with the visual presentation of your resume but still make it ATS-friendly.",
+      "Yes, we offer a refund policy if you're not satisfied. Please check our terms for details.",
+  },
+  {
+    question: "How can I check if the words are in if they are not visible?",
+    answer:
+      "You can copy and paste the text into a plain text editor to reveal the hidden keywords. Alternatively, use a text inspector or contact us for assistance.",
+  },
+  {
+    question: "Does this guarantee that I will get an interview?",
+    answer:
+      "No, but it maximizes your chances by ensuring your CV passes ATS filters and aligns with job requirements.",
   },
   {
     question: "How do I get started",
     answer:
-      "Simply sign up, upload your CV and job description, and our system will automatically insert relevant keywords. Within minutes, you'll have a new, ATS-optimized version of your CV ready for download.",
+      "Simply sign up, upload your CV and job description, and our system will automatically insert relevant keywords. Within seconds, you'll have a new, ATS-optimized version of your CV ready for download.",
   },
 ];
 
@@ -61,10 +71,12 @@ export default function Component() {
               <Twitter className="h-4 w-4" />
               <span className="sr-only">Contact on Twitter</span>
             </Button>
-            <Button variant="outline" size="icon">
-              <Mail className="h-4 w-4" />
-              <span className="sr-only">Contact by email</span>
-            </Button>
+            <a href="mailto:resumateapp@gmail.com">
+              <Button variant="outline" size="icon">
+                <Mail className="h-4 w-4" />
+                <span className="sr-only">Contact by email</span>
+              </Button>
+            </a>
           </div>
         </div>
         <div className="md:w-2/3">

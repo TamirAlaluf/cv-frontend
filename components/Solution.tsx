@@ -5,25 +5,25 @@ const features = [
     icon: Zap,
     title: "Quick and Easy to Use",
     description:
-      "ResuMate simplifies CV optimization into a quick, hassle-free step. No need to repeatedly edit or verify your resume — just upload, optimize, and submit your application with confidence.",
+      "No need to repeatedly edit or verify your resume — just upload, optimize, and submit your application with confidence.",
   },
   {
     icon: Search,
     title: "Genius Hidden Keyword Technology",
     description:
-      "Our revolutionary AI seamlessly embeds essential keywords invisibly within your CV. The magic happens behind the scenes – your resume looks identical, but it's supercharged for ATS success!",
+      "Our revolutionary AI seamlessly embeds essential keywords invisibly within your CV. Your resume looks identical, but it's supercharged for ATS success!",
   },
   {
     icon: TrendingUp,
     title: "Maximize Your Chances",
     description:
-      "By optimizing your CV for specific roles, ResuMate significantly increases your chances of passing ATS filters and catching the attention of hiring managers. Our smart algorithm ensures you're always putting your best foot forward.",
+      "ResuMate significantly increases your chances of passing ATS filters and catching the attention of hiring managers.",
   },
   {
     icon: Sparkles,
-    title: "Seamless and Professional",
+    title: "Works with Any Template",
     description:
-      "Enjoy a polished, ATS-friendly resume that showcases your unique strengths and skills. Our optimization preserves your original formatting and content while enhancing its ATS compatibility – the perfect blend of form and function.",
+      "ResuMate seamlessly integrates with any CV design from Canva, Word, or other tools. Your template stays professional and polished while we enhance it.",
   },
 ];
 
@@ -47,7 +47,10 @@ export default function SolutionSection() {
                 <h3 className="text-lg font-semibold text-gray-900">
                   {feature.title.split(" ").map((word, i) =>
                     word.toLowerCase() === "easy" ||
-                    word.toLowerCase() === "hidden" ? (
+                    word.toLowerCase() === "hidden" ||
+                    word.toLowerCase() === "maximize" ||
+                    word.toLowerCase() === "any" ||
+                    word.toLowerCase() === "template" ? (
                       <span key={i} className="text-blue-600">
                         {word}{" "}
                       </span>

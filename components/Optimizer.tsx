@@ -132,7 +132,6 @@ export default function ResumeOptimizer({
     try {
       // Convert PDF to base64
       const base64 = await pdfToBase64(selectedFile as File);
-      console.log(base64);
 
       // Send directly to Lambda
       const response = await fetch(LAMBDA_URL, {
@@ -149,22 +148,43 @@ export default function ResumeOptimizer({
       if (!response.ok) throw new Error("Failed to optimize resume");
 
       const data = await response.json();
+      console.log(data);
 
-      // Download the optimized PDF
-      base64toDownLoadURL(data.optimized_pdf, outputFileName);
+      // Convert base64 back to PDF and download
+      // const pdfContent = atob(data.pdf_base64);
+      // const pdfBlob = new Blob(
+      //   [
+      //     new Uint8Array(
+      //       pdfContent.split("").map((char) => char.charCodeAt(0))
+      //     ),
+      //   ],
+      //   { type: "application/pdf" }
+      // );
+      // const downloadUrl = URL.createObjectURL(pdfBlob);
 
-      // await fetch("/api/updateUsage", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     email: user?.emailAddresses?.[0]?.emailAddress,
-      //   }),
-      // });
+      // const link = document.createElement("a");
+      // link.href = downloadUrl;
+      // link.download = `${outputFileName.trim() || "optimized_resume"}.pdf`;
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
+      // URL.revokeObjectURL(downloadUrl);
+
+      await fetch("/api/updateUsage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user?.emailAddresses?.[0]?.emailAddress,
+        }),
+      });
       setUsageLeft((prev) => (prev ? prev - 1 : 0));
     } catch (err) {
-      setError("Failed to optimize resume. Please try again.");
+      // setError("Failed to optimize resume. Please try again.");
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred"
+      );
     } finally {
       setIsLoading(false);
     }

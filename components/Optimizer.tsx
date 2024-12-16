@@ -149,7 +149,16 @@ export default function ResumeOptimizer({
       });
 
       if (!response.ok) throw new Error("Failed to optimize resume");
-
+      await fetch("/api/updateUsage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user?.emailAddresses?.[0]?.emailAddress,
+        }),
+      });
+      setUsageLeft((prev) => (prev ? prev - 1 : 0));
       const data = await response.json();
       console.log(data);
 
@@ -173,19 +182,8 @@ export default function ResumeOptimizer({
       link.download = `${outputFileName.trim() || "optimized_resume"}.pdf`;
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(downloadUrl);
-
-      await fetch("/api/updateUsage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user?.emailAddresses?.[0]?.emailAddress,
-        }),
-      });
-      setUsageLeft((prev) => (prev ? prev - 1 : 0));
+      // document.body.removeChild(link);
+      // URL.revokeObjectURL(downloadUrl);
     } catch (err) {
       setError("Failed to optimize resume. Please try again.");
     } finally {

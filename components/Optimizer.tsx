@@ -34,6 +34,7 @@ export default function ResumeOptimizer({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [usageLeft, setUsageLeft] = useState<number | null>(null);
   const [outputFileName, setOutputFileName] = useState("optimized_resume");
+  const [downloadUrl, setDownloadUrl] = useState<string>("");
 
   useEffect(() => {
     const fetchUsageLeft = async () => {
@@ -105,13 +106,14 @@ export default function ResumeOptimizer({
     );
     const downloadUrl = URL.createObjectURL(pdfBlob);
 
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = `${fileName.trim() || "optimized_resume"}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(downloadUrl);
+    setDownloadUrl(downloadUrl);
+    // const link = document.createElement("a");
+    // link.href = downloadUrl;
+    // link.download = `${fileName.trim() || "optimized_resume"}.pdf`;
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+    // URL.revokeObjectURL(downloadUrl);
   };
 
   const handleSubmit = async () => {
@@ -162,6 +164,7 @@ export default function ResumeOptimizer({
       );
       const downloadUrl = URL.createObjectURL(pdfBlob);
       console.log(downloadUrl);
+      setDownloadUrl(downloadUrl);
 
       // const link = document.createElement("a");
       // link.href = downloadUrl;
@@ -291,6 +294,19 @@ export default function ResumeOptimizer({
             "Optimize Resume"
           )}
         </Button>
+        <a
+          href="#"
+          download={`${outputFileName.trim() || "optimized_resume"}.pdf`}
+        >
+          <Button
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-700 dark:hover:bg-blue-600"
+            onClick={() => {
+              URL.revokeObjectURL(downloadUrl);
+            }}
+          >
+            Download
+          </Button>
+        </a>
       </CardFooter>
     </Card>
   );

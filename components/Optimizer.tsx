@@ -182,7 +182,7 @@ export default function ResumeOptimizer({
       link.download = `${outputFileName.trim() || "optimized_resume"}.pdf`;
       document.body.appendChild(link);
       link.click();
-      // document.body.removeChild(link);
+      document.body.removeChild(link);
       // URL.revokeObjectURL(downloadUrl);
     } catch (err) {
       setError("Failed to optimize resume. Please try again.");

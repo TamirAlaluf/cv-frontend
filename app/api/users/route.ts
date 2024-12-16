@@ -62,6 +62,8 @@ export async function POST(request: NextRequest) {
 
     console.log("User created:", user);
     // Send a welcome email
+    console.log("username", process.env.EMAIL_USERNAME);
+    console.log("password", process.env.EMAIL_PASSWORD);
     try {
       await transporter.sendMail({
         from: process.env.EMAIL_USERNAME,

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { uploadToS3 } from "@/lib/s3";
 
 export async function POST(req: NextRequest) {
   console.log("optimize-resume POST request");
   try {
     const body = await req.json();
     const { job_description, pdf_base64, email } = body;
-
     // Validate inputs
     if (!job_description || !pdf_base64 || !email) {
       return NextResponse.json(
@@ -61,6 +61,8 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await lambdaResponse.json();
+    // Upload optimized PDF to S3
+    const s3Result = await uploadToS3(data.pdf_base64, email);
     return NextResponse.json({
       ...data,
       remainingUsage: updatedUser.number_usage_left,

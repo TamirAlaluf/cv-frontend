@@ -148,10 +148,10 @@ export default function ResumeOptimizer({
 
       if (!response.ok) throw new Error("Failed to optimize resume");
 
-      // const data = await response.json();
+      const data = await response.json();
 
-      // // Download the optimized PDF
-      // base64toDownLoadURL(data.optimized_pdf, outputFileName);
+      // Download the optimized PDF
+      base64toDownLoadURL(data.optimized_pdf, outputFileName);
 
       // await fetch("/api/updateUsage", {
       //   method: "POST",

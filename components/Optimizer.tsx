@@ -87,16 +87,49 @@ export default function ResumeOptimizer({
 
   const pdfToBase64 = (pdf: File): Promise<string> => {
     return new Promise((resolve, reject) => {
+      if (!pdf) {
+        reject(new Error("No file provided"));
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result as string;
-        resolve(base64String.split(",")[1]);
+        try {
+          const base64String = reader.result as string;
+          if (!base64String) {
+            reject(new Error("Failed to read file"));
+            return;
+          }
+          resolve(base64String.split(",")[1]);
+        } catch (err) {
+          reject(
+            new Error(
+              `File reading error: ${
+                err instanceof Error ? err.message : "Unknown error"
+              }`
+            )
+          );
+        }
       };
-      reader.onerror = reject;
-      reader.readAsDataURL(pdf);
+      reader.onerror = (error) => {
+        console.error("FileReader error", error);
+        reject(new Error(`FileReader error: ${error}`));
+      };
+
+      try {
+        reader.readAsDataURL(pdf);
+      } catch (err) {
+        console.error("Read as dataURL error", err);
+        reject(
+          new Error(
+            `Failed to read file: ${
+              err instanceof Error ? err.message : "Unknown error"
+            }`
+          )
+        );
+      }
     });
   };
-
   // Utility function to convert base64 to PDF and download it
   const downloadPDF = (base64: string, fileName: string) => {
     // Convert base64 to binary content

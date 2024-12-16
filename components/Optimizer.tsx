@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload } from "lucide-react";
+import { saveAs } from "file-saver";
 
 const countTokens = (text: string): number => {
   // Count all non-whitespace characters
@@ -162,9 +163,11 @@ export default function ResumeOptimizer({
         ],
         { type: "application/pdf" }
       );
+      saveAs(pdfBlob, `${outputFileName.trim() || "optimized_resume"}.pdf`);
+
       const downloadUrl = URL.createObjectURL(pdfBlob);
       console.log(downloadUrl);
-      setDownloadUrl(downloadUrl);
+      // Open the Blob in a new tab
 
       // const link = document.createElement("a");
       // link.href = downloadUrl;
@@ -294,19 +297,6 @@ export default function ResumeOptimizer({
             "Optimize Resume"
           )}
         </Button>
-        <a
-          href={downloadUrl}
-          download={`${outputFileName.trim() || "optimized_resume"}.pdf`}
-        >
-          <Button
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-700 dark:hover:bg-blue-600"
-            onClick={() => {
-              URL.revokeObjectURL(downloadUrl);
-            }}
-          >
-            Download
-          </Button>
-        </a>
       </CardFooter>
     </Card>
   );

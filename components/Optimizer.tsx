@@ -199,6 +199,19 @@ export default function ResumeOptimizer({
       setUsageLeft((prev) => (prev ? prev - 1 : 0));
     } catch (err) {
       // setError("Failed to optimize resume. Please try again.");
+      if (err instanceof Error && err.message === "Load failed") {
+        await fetch("/api/updateUsage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: user?.emailAddresses?.[0]?.emailAddress,
+          }),
+        });
+        setUsageLeft((prev) => (prev ? prev - 1 : 0));
+      }
+
       setError(
         err instanceof Error ? err.message : "An unexpected error occurred"
       );

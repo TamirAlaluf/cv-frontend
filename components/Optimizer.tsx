@@ -87,84 +87,33 @@ export default function ResumeOptimizer({
 
   const pdfToBase64 = (pdf: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-      if (!pdf) {
-        // reject(new Error("No file provided"));
-        throw new Error("No file provided");
-      }
-
       const reader = new FileReader();
       reader.onloadend = () => {
-        try {
-          const base64String = reader.result as string;
-          if (!base64String) {
-            // reject(new Error("Failed to read file"));
-            // return;
-            throw new Error("Failed to read file");
-          }
-          resolve(base64String.split(",")[1]);
-        } catch (err) {
-          // reject(
-          //   new Error(
-          //     `File reading error: ${
-          //       err instanceof Error ? err.message : "Unknown error"
-          //     }`
-          //   )
-          // );
-          throw new Error(
-            `File reading error: ${
-              err instanceof Error ? err.message : "Unknown error"
-            }`
-          );
-        }
+        const base64String = reader.result as string;
+        resolve(base64String.split(",")[1]);
       };
-      reader.onerror = (error) => {
-        // console.error("FileReader error", error);
-        // reject(new Error(`FileReader error: ${error}`));
-        throw new Error(`FileReader error: ${error}`);
-      };
-
-      try {
-        reader.readAsDataURL(pdf);
-      } catch (err) {
-        // console.error("Read as dataURL error", err);
-        // reject(
-        //   new Error(
-        //     `Failed to read file: ${
-        //       err instanceof Error ? err.message : "Unknown error"
-        //     }`
-        //   )
-        // );
-        throw new Error(
-          `Failed to read file: ${
-            err instanceof Error ? err.message : "Unknown error"
-          }`
-        );
-      }
+      reader.onerror = reject;
+      reader.readAsDataURL(pdf);
     });
   };
-  // Utility function to convert base64 to PDF and download it
-  const downloadPDF = (base64: string, fileName: string) => {
-    // Convert base64 to binary content
+
+  const base64toDownLoadURL = (base64: string, fileName: string) => {
     const pdfContent = atob(base64);
     const pdfBlob = new Blob(
       [new Uint8Array(pdfContent.split("").map((char) => char.charCodeAt(0)))],
       { type: "application/pdf" }
     );
-
-    // Create a temporary download link
     const downloadUrl = URL.createObjectURL(pdfBlob);
+
     const link = document.createElement("a");
     link.href = downloadUrl;
     link.download = `${fileName.trim() || "optimized_resume"}.pdf`;
     document.body.appendChild(link);
     link.click();
-
-    // Cleanup
     document.body.removeChild(link);
     URL.revokeObjectURL(downloadUrl);
   };
 
-  // Refactored handleSubmit
   const handleSubmit = async () => {
     if (!handleValidate()) return;
     if (!user) {
@@ -183,40 +132,39 @@ export default function ResumeOptimizer({
     try {
       // Convert PDF to base64
       const base64 = await pdfToBase64(selectedFile as File);
+      console.log(base64);
 
-      // Send directly to Lambda
-      const response = await fetch(LAMBDA_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          job_description: jobDescription,
-          pdf_base64: base64,
-        }),
-      });
+      // // Send directly to Lambda
+      // const response = await fetch(LAMBDA_URL, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     job_description: jobDescription,
+      //     pdf_base64: base64,
+      //   }),
+      // });
 
-      if (!response.ok) throw new Error("Failed to optimize resume");
+      // if (!response.ok) throw new Error("Failed to optimize resume");
 
-      const data = await response.json();
+      // const data = await response.json();
 
-      downloadPDF(data.pdf_base64, outputFileName || "optimized_resume");
+      // // Download the optimized PDF
+      // base64toDownLoadURL(data.optimized_pdf, outputFileName);
 
-      await fetch("/api/updateUsage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user?.emailAddresses?.[0]?.emailAddress,
-        }),
-      });
+      // await fetch("/api/updateUsage", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     email: user?.emailAddresses?.[0]?.emailAddress,
+      //   }),
+      // });
       setUsageLeft((prev) => (prev ? prev - 1 : 0));
     } catch (err) {
-      // setError("Failed to optimize resume. Please try again.");
-      setError(
-        err instanceof Error ? err.message : "Failed to optimize resume"
-      );
+      setError("Failed to optimize resume. Please try again.");
     } finally {
       setIsLoading(false);
     }

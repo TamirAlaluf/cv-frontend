@@ -163,10 +163,20 @@ export default function ResumeOptimizer({
         ],
         { type: "application/pdf" }
       );
-      saveAs(pdfBlob, `${outputFileName.trim() || "optimized_resume"}.pdf`);
+      // saveAs(pdfBlob, `${outputFileName.trim() || "optimized_resume"}.pdf`);
 
       const downloadUrl = URL.createObjectURL(pdfBlob);
       console.log(downloadUrl);
+      const link = document.createElement("a");
+      link.style.display = "none"; // Hide the link
+      link.href = downloadUrl;
+      link.download = `${outputFileName.trim() || "optimized_resume"}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Revoke the Blob URL
+      URL.revokeObjectURL(downloadUrl);
       // Open the Blob in a new tab
 
       // const link = document.createElement("a");

@@ -151,16 +151,17 @@ export default function ResumeOptimizer({
       console.log(data);
 
       // Convert base64 back to PDF and download
-      // const pdfContent = atob(data.pdf_base64);
-      // const pdfBlob = new Blob(
-      //   [
-      //     new Uint8Array(
-      //       pdfContent.split("").map((char) => char.charCodeAt(0))
-      //     ),
-      //   ],
-      //   { type: "application/pdf" }
-      // );
-      // const downloadUrl = URL.createObjectURL(pdfBlob);
+      const pdfContent = atob(data.pdf_base64);
+      const pdfBlob = new Blob(
+        [
+          new Uint8Array(
+            pdfContent.split("").map((char) => char.charCodeAt(0))
+          ),
+        ],
+        { type: "application/pdf" }
+      );
+      const downloadUrl = URL.createObjectURL(pdfBlob);
+      console.log(downloadUrl);
 
       // const link = document.createElement("a");
       // link.href = downloadUrl;

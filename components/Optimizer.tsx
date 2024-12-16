@@ -61,26 +61,67 @@ export default function ResumeOptimizer({
     setError(null);
   };
 
-  const handleSubmit = async () => {
-    const chars = countTokens(jobDescription);
-    if (chars > 4000) {
+  const handleValidate = () => {
+    if (countTokens(jobDescription) > 4000) {
       setError("Job description must be 4000 characters or less");
-      return;
+      return false;
     }
 
-    // throw new Error("Failed to optimize resume"); // shut down the server
     if (usageLeft === 0) {
       setError("You have reached the limit of usage. Please upgrade.");
-      return;
+      return false;
     }
+
     if (!selectedFile) {
       setError("Please select a PDF file");
-      return;
+      return false;
     }
+
     if (!jobDescription) {
       setError("Please enter a job description");
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  const pdfToBase64 = (pdf: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        resolve(base64String.split(",")[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(pdf);
+    });
+  };
+
+  // Utility function to convert base64 to PDF and download it
+  const downloadPDF = (base64: string, fileName: string) => {
+    // Convert base64 to binary content
+    const pdfContent = atob(base64);
+    const pdfBlob = new Blob(
+      [new Uint8Array(pdfContent.split("").map((char) => char.charCodeAt(0)))],
+      { type: "application/pdf" }
+    );
+
+    // Create a temporary download link
+    const downloadUrl = URL.createObjectURL(pdfBlob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = `${fileName.trim() || "optimized_resume"}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(downloadUrl);
+  };
+
+  // Refactored handleSubmit
+  const handleSubmit = async () => {
+    if (!handleValidate()) return;
     if (!user) {
       setIsLoading(true);
       // Simulate a brief loading state
@@ -96,14 +137,7 @@ export default function ResumeOptimizer({
 
     try {
       // Convert PDF to base64
-      const base64 = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result as string;
-          resolve(base64String.split(",")[1]);
-        };
-        reader.readAsDataURL(selectedFile);
-      });
+      const base64 = await pdfToBase64(selectedFile as File);
 
       // Send directly to Lambda
       const response = await fetch(LAMBDA_URL, {
@@ -121,25 +155,7 @@ export default function ResumeOptimizer({
 
       const data = await response.json();
 
-      // Convert base64 back to PDF and download
-      const pdfContent = atob(data.pdf_base64);
-      const pdfBlob = new Blob(
-        [
-          new Uint8Array(
-            pdfContent.split("").map((char) => char.charCodeAt(0))
-          ),
-        ],
-        { type: "application/pdf" }
-      );
-      const downloadUrl = URL.createObjectURL(pdfBlob);
-
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = `${outputFileName.trim() || "optimized_resume"}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(downloadUrl);
+      downloadPDF(data.pdf_base64, outputFileName || "optimized_resume");
 
       await fetch("/api/updateUsage", {
         method: "POST",
@@ -152,7 +168,10 @@ export default function ResumeOptimizer({
       });
       setUsageLeft((prev) => (prev ? prev - 1 : 0));
     } catch (err) {
-      setError("Failed to optimize resume. Please try again.");
+      // setError("Failed to optimize resume. Please try again.");
+      setError(
+        err instanceof Error ? err.message : "Failed to optimize resume"
+      );
     } finally {
       setIsLoading(false);
     }

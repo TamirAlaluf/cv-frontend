@@ -174,18 +174,7 @@ export default function ResumeOptimizer({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      // Revoke the Blob URL
       URL.revokeObjectURL(downloadUrl);
-      // Open the Blob in a new tab
-
-      // const link = document.createElement("a");
-      // link.href = downloadUrl;
-      // link.download = `${outputFileName.trim() || "optimized_resume"}.pdf`;
-      // document.body.appendChild(link);
-      // link.click();
-      // document.body.removeChild(link);
-      // URL.revokeObjectURL(downloadUrl);
 
       await fetch("/api/updateUsage", {
         method: "POST",
@@ -198,21 +187,7 @@ export default function ResumeOptimizer({
       });
       setUsageLeft((prev) => (prev ? prev - 1 : 0));
     } catch (err) {
-      // setError("Failed to optimize resume. Please try again.");
-      if (err instanceof Error && err.message === "Load failed") {
-        await fetch("/api/updateUsage", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: user?.emailAddresses?.[0]?.emailAddress,
-          }),
-        });
-        setUsageLeft((prev) => (prev ? prev - 1 : 0));
-      } else {
-        setError("An unexpected error occurred");
-      }
+      setError("Failed to optimize resume. Please try again.");
     } finally {
       setIsLoading(false);
     }

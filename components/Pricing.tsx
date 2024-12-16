@@ -131,15 +131,15 @@ export default function PricingSection() {
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("Error saving feedback:", error.message);
         showToast(
           "Error",
-          "Unable to process your feedback. Please try again.",
-          "destructive"
+          "You already have a pending request. Please try again later."
         );
       } else {
-        console.error("Unknown error occurred:", error);
-        showToast("Error", "An unexpected error occurred.", "destructive");
+        showToast(
+          "Error",
+          "You already have a pending request. Please try again later."
+        );
       }
     }
   };
@@ -173,11 +173,9 @@ export default function PricingSection() {
         );
       }
     } catch (error) {
-      console.error("Error saving feedback:", error);
       showToast(
         "Error",
-        "Unable to process your request. Please try again.",
-        "destructive"
+        "You already have a pending request. Please try again later."
       );
     }
   };

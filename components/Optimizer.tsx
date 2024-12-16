@@ -134,19 +134,19 @@ export default function ResumeOptimizer({
       const base64 = await pdfToBase64(selectedFile as File);
       console.log(base64);
 
-      // // Send directly to Lambda
-      // const response = await fetch(LAMBDA_URL, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     job_description: jobDescription,
-      //     pdf_base64: base64,
-      //   }),
-      // });
+      // Send directly to Lambda
+      const response = await fetch(LAMBDA_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          job_description: jobDescription,
+          pdf_base64: base64,
+        }),
+      });
 
-      // if (!response.ok) throw new Error("Failed to optimize resume");
+      if (!response.ok) throw new Error("Failed to optimize resume");
 
       // const data = await response.json();
 

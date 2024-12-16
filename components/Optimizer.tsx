@@ -126,22 +126,17 @@ export default function ResumeOptimizer({
         body: JSON.stringify({
           job_description: jobDescription,
           pdf_base64: base64,
+          email: user?.emailAddresses?.[0]?.emailAddress, // Pass email in the same request
         }),
       });
 
       if (!response.ok) throw new Error("Failed to optimize resume");
-      await fetch("/api/updateUsage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user?.emailAddresses?.[0]?.emailAddress,
-        }),
-      });
-      setUsageLeft((prev) => (prev ? prev - 1 : 0));
+
       const data = await response.json();
-      console.log(data);
+      if (data.remainingUsage !== undefined) {
+        console.log("Remaining Usage:", data.remainingUsage);
+        setUsageLeft(data.remainingUsage);
+      }
 
       // Convert base64 back to PDF and download
       const pdfContent = atob(data.pdf_base64);
@@ -153,7 +148,6 @@ export default function ResumeOptimizer({
         ],
         { type: "application/pdf" }
       );
-      // saveAs(pdfBlob, `${outputFileName.trim() || "optimized_resume"}.pdf`);
 
       const downloadUrl = URL.createObjectURL(pdfBlob);
       console.log(downloadUrl);

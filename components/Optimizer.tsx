@@ -183,7 +183,7 @@ export default function ResumeOptimizer({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      // URL.revokeObjectURL(downloadUrl);
+      URL.revokeObjectURL(downloadUrl);
     } catch (err) {
       setError("Failed to optimize resume. Please try again.");
     } finally {

@@ -35,7 +35,6 @@ export default function ResumeOptimizer({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [usageLeft, setUsageLeft] = useState<number | null>(null);
   const [outputFileName, setOutputFileName] = useState("optimized_resume");
-  const [downloadUrl, setDownloadUrl] = useState<string>("");
 
   useEffect(() => {
     const fetchUsageLeft = async () => {
@@ -99,24 +98,6 @@ export default function ResumeOptimizer({
     });
   };
 
-  const base64toDownLoadURL = (base64: string, fileName: string) => {
-    const pdfContent = atob(base64);
-    const pdfBlob = new Blob(
-      [new Uint8Array(pdfContent.split("").map((char) => char.charCodeAt(0)))],
-      { type: "application/pdf" }
-    );
-    const downloadUrl = URL.createObjectURL(pdfBlob);
-
-    setDownloadUrl(downloadUrl);
-    // const link = document.createElement("a");
-    // link.href = downloadUrl;
-    // link.download = `${fileName.trim() || "optimized_resume"}.pdf`;
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-    // URL.revokeObjectURL(downloadUrl);
-  };
-
   const handleSubmit = async () => {
     if (!handleValidate()) return;
     if (!user) {
@@ -137,7 +118,7 @@ export default function ResumeOptimizer({
       const base64 = await pdfToBase64(selectedFile as File);
 
       // Send directly to Lambda
-      const response = await fetch(LAMBDA_URL, {
+      const response = await fetch("/api/optimize-resume", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

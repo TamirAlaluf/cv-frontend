@@ -11,19 +11,19 @@ const features = [
     icon: Search,
     title: "Genius Hidden Keyword Technology",
     description:
-      "Our revolutionary AI seamlessly embeds essential keywords invisibly within your CV. Your resume looks identical, but it's supercharged for ATS success!",
+      "Our AI inserts essential keywords invisibly within your CV. Your resume looks identical, but it's supercharged for ATS success!",
   },
   {
     icon: TrendingUp,
     title: "Maximize Your Chances",
     description:
-      "ResuMate significantly increases your chances of passing ATS filters and catching the attention of hiring managers.",
+      "ResuMate significantly increases your chances of passing the companies' filters and catching the attention of hiring managers.",
   },
   {
     icon: Sparkles,
     title: "Works with Any Template",
     description:
-      "ResuMate seamlessly integrates with any CV design from Canva, Word, or other tools. Your template stays professional and polished while we enhance it.",
+      "ResuMate integrates with any CV design from Canva, Word, or other tools. Your template stays professional while we enhance it.",
   },
 ];
 

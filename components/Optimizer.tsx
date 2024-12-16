@@ -210,11 +210,9 @@ export default function ResumeOptimizer({
           }),
         });
         setUsageLeft((prev) => (prev ? prev - 1 : 0));
+      } else {
+        setError("An unexpected error occurred");
       }
-
-      setError(
-        err instanceof Error ? err.message : "An unexpected error occurred"
-      );
     } finally {
       setIsLoading(false);
     }

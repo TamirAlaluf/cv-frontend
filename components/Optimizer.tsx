@@ -88,8 +88,8 @@ export default function ResumeOptimizer({
   const pdfToBase64 = (pdf: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       if (!pdf) {
-        reject(new Error("No file provided"));
-        return;
+        // reject(new Error("No file provided"));
+        throw new Error("No file provided");
       }
 
       const reader = new FileReader();
@@ -97,35 +97,47 @@ export default function ResumeOptimizer({
         try {
           const base64String = reader.result as string;
           if (!base64String) {
-            reject(new Error("Failed to read file"));
-            return;
+            // reject(new Error("Failed to read file"));
+            // return;
+            throw new Error("Failed to read file");
           }
           resolve(base64String.split(",")[1]);
         } catch (err) {
-          reject(
-            new Error(
-              `File reading error: ${
-                err instanceof Error ? err.message : "Unknown error"
-              }`
-            )
+          // reject(
+          //   new Error(
+          //     `File reading error: ${
+          //       err instanceof Error ? err.message : "Unknown error"
+          //     }`
+          //   )
+          // );
+          throw new Error(
+            `File reading error: ${
+              err instanceof Error ? err.message : "Unknown error"
+            }`
           );
         }
       };
       reader.onerror = (error) => {
-        console.error("FileReader error", error);
-        reject(new Error(`FileReader error: ${error}`));
+        // console.error("FileReader error", error);
+        // reject(new Error(`FileReader error: ${error}`));
+        throw new Error(`FileReader error: ${error}`);
       };
 
       try {
         reader.readAsDataURL(pdf);
       } catch (err) {
-        console.error("Read as dataURL error", err);
-        reject(
-          new Error(
-            `Failed to read file: ${
-              err instanceof Error ? err.message : "Unknown error"
-            }`
-          )
+        // console.error("Read as dataURL error", err);
+        // reject(
+        //   new Error(
+        //     `Failed to read file: ${
+        //       err instanceof Error ? err.message : "Unknown error"
+        //     }`
+        //   )
+        // );
+        throw new Error(
+          `Failed to read file: ${
+            err instanceof Error ? err.message : "Unknown error"
+          }`
         );
       }
     });

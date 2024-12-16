@@ -295,7 +295,7 @@ export default function ResumeOptimizer({
           )}
         </Button>
         <a
-          href="#"
+          href={downloadUrl}
           download={`${outputFileName.trim() || "optimized_resume"}.pdf`}
         >
           <Button

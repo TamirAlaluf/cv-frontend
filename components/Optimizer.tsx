@@ -58,6 +58,12 @@ export default function ResumeOptimizer({
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    if (file && file.size > 1 * 1024 * 1024) {
+      // Limit set to 1MB
+      setError("File size must be 1MB or less");
+      setSelectedFile(null);
+      return;
+    }
     setSelectedFile(file || null);
     setError(null);
   };

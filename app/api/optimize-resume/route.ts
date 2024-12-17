@@ -25,13 +25,25 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Check if user has reached their usage limit
-    if (updatedUser.number_usage_left < 0) {
+    if (!updatedUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    } else if (updatedUser.number_usage_left < 0) {
+      // Rollback usage if limit is exceeded
+      await prisma.user.update({
+        where: { email },
+        data: {
+          number_usage_left: {
+            increment: 1,
+          },
+        },
+      });
       return NextResponse.json(
         { error: "Usage limit exceeded" },
         { status: 403 }
       );
     }
+
+    console.log("Updated user:", updatedUser);
 
     // Proceed with Lambda optimization
     const LAMBDA_URL =

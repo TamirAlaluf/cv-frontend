@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { uploadToS3 } from "@/lib/s3";
+import { SignatureV4 } from "@aws-sdk/signature-v4";
+import { Sha256 } from "@aws-crypto/sha256-js";
+import { HttpRequest } from "@aws-sdk/protocol-http";
 
 export async function POST(req: NextRequest) {
   console.log("optimize-resume POST request");
   try {
     const body = await req.json();
     const { job_description, pdf_base64, email } = body;
+
     // Validate inputs
     if (!job_description || !pdf_base64 || !email) {
       return NextResponse.json(
@@ -43,20 +47,42 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("Updated user:", updatedUser);
+    // Prepare the signed request
+    const apiGatewayUrl = new URL(process.env.API_GATEWAY_URL || "");
+    const requestBody = JSON.stringify({
+      job_description: job_description,
+      pdf_base64: pdf_base64,
+    });
 
-    // Proceed with Lambda optimization
-    const LAMBDA_URL =
-      process.env.NEXT_PUBLIC_LAMBDA_URL || "http://localhost:4000/";
-    const lambdaResponse = await fetch(LAMBDA_URL, {
+    const signer = new SignatureV4({
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+      },
+      region: process.env.AWS_REGION || "",
+      service: "execute-api", // Important for API Gateway
+      sha256: Sha256,
+    });
+
+    const httpRequest = new HttpRequest({
       method: "POST",
+      hostname: apiGatewayUrl.hostname,
+      path: apiGatewayUrl.pathname,
       headers: {
         "Content-Type": "application/json",
+        Host: apiGatewayUrl.hostname,
       },
-      body: JSON.stringify({
-        job_description: job_description,
-        pdf_base64: pdf_base64,
-      }),
+      body: requestBody,
+    });
+
+    // Sign the request
+    const signedRequest = await signer.sign(httpRequest);
+
+    // Send the signed request
+    const lambdaResponse = await fetch(process.env.API_GATEWAY_URL || "", {
+      method: "POST",
+      headers: signedRequest.headers,
+      body: requestBody,
     });
 
     if (!lambdaResponse.ok) {
@@ -69,7 +95,11 @@ export async function POST(req: NextRequest) {
           },
         },
       });
-      throw new Error("Lambda request failed");
+
+      const errorText = await lambdaResponse.text();
+      console.error("API Gateway error response:", errorText);
+
+      throw new Error("API Gateway request failed");
     }
 
     const data = await lambdaResponse.json();

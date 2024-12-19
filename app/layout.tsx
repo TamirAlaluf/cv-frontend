@@ -28,7 +28,6 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
 };
-
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -48,7 +47,7 @@ export const metadata: Metadata = {
     "AI resume",
   ],
   verification: {
-    google: "google0927cc98220c4644.html",
+    google: "mlawQVOvP8hRxENUT6TuVtOr90LiTp3aPY9wBwlOXms",
   },
   openGraph: {
     type: "website",

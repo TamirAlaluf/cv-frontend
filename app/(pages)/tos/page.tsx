@@ -1,5 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms of Service | ResuMate',
+  description: 'ResuMate terms of service. Understand your rights and obligations when using our CV optimization platform.',
+  keywords: ['terms of service', 'user agreement', 'legal terms', 'ResuMate terms'],
+  openGraph: {
+    title: 'Terms of Service | ResuMate',
+    description: 'ResuMate terms of service. Understand your rights and obligations when using our CV optimization platform.',
+    type: 'website',
+    url: 'https://resumateapp.com/tos',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms of Service | ResuMate',
+    description: 'ResuMate terms of service. Understand your rights and obligations when using our CV optimization platform.',
+  },
+};
 
 const sections = [
   {

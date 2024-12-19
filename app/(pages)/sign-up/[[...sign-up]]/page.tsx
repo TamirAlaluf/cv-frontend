@@ -1,56 +1,28 @@
-"use client";
-import { useEffect } from "react";
-import { SignUp, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { SignUp } from "@clerk/nextjs";
 import NavBar from "@/components/NavBar";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up | ResuMate",
+  description:
+    "Create your ResuMate account to start optimizing your CV with AI technology.",
+  keywords: ["sign up", "register", "create account", "ResuMate registration"],
+  openGraph: {
+    title: "Sign Up | ResuMate",
+    description:
+      "Create your ResuMate account to start optimizing your CV with AI technology.",
+    type: "website",
+    url: "https://resumateapp.com/sign-up",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sign Up | ResuMate",
+    description:
+      "Create your ResuMate account to start optimizing your CV with AI technology.",
+  },
+};
 
 export default function Signup() {
-  const { user, isSignedIn } = useUser();
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   const handleSignup = async () => {
-  //     console.log("User:", user);
-  //     if (user && isSignedIn) {
-  //       console.log("User signed in");
-  //       try {
-  //         // Extract user details
-  //         const { username, emailAddresses } = user;
-  //         const email = emailAddresses[0]?.emailAddress;
-  //         console.log("User details:", { username, email });
-  //         // Make the POST request to save the user
-  //         const response = await fetch("/api/users", {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             name: username,
-  //             email,
-  //           }),
-  //         });
-
-  //         if (!response.ok) {
-  //           throw new Error("Failed to save user details");
-  //         }
-
-  //         console.log("User details saved successfully");
-
-  //         // Redirect after successful save
-  //         router.push("/");
-  //       } catch (error: unknown) {
-  //         if (error instanceof Error) {
-  //           console.error("Error saving user details:", error.message);
-  //         } else {
-  //           console.error("An unknown error occurred");
-  //         }
-  //       }
-  //     }
-  //   };
-
-  //   handleSignup();
-  // }, [user, isSignedIn, router]);
-
   return (
     <>
       <NavBar />

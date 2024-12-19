@@ -9,16 +9,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { Exo_2 } from "next/font/google";
 import { Bricolage_Grotesque } from "next/font/google";
 
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
 const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["400", "700"], // You can specify multiple weights
@@ -34,11 +24,52 @@ const exo2 = Exo_2({
   weight: ["400", "700"], // You can specify multiple weights
   variable: "--font-exo2", // Optional: for using with Tailwind or CSS variables
 });
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "ResuMate",
-  description: "A resume builder for developers",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  ),
+  title: {
+    default: "ResuMate | AI-Powered CV Optimization",
+    template: "%s | ResuMate",
+  },
+  description:
+    "ResuMate helps you optimize your CV with AI technology to pass ATS systems and land more interviews.",
+  keywords: [
+    "CV optimization",
+    "resume builder",
+    "ATS optimization",
+    "job search",
+    "career tools",
+    "AI resume",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://resumateapp.com",
+    siteName: "ResuMate",
+    images: [
+      {
+        url: "/favicon.png",
+        width: 1200,
+        height: 630,
+        alt: "ResuMate - AI-Powered CV Optimization",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ResuMate | AI-Powered CV Optimization",
+    description:
+      "Optimize your CV with AI technology to pass ATS systems and land more interviews.",
+    images: ["/favicon.png"],
+  },
   icons: {
-    icon: "/favicon.png", // Ensure favicon.ico is in the public folder
+    icon: "/favicon.png",
   },
 };
 

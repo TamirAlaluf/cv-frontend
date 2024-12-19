@@ -81,7 +81,7 @@ export default function ProblemSection() {
                   }`}
                 style={{
                   width: "250px",
-                  transform: `rotate(${Math.random() * 10 - 5}deg)`,
+                  transform: `rotate(${index * 2 - 4}deg)`,
                 }}
               >
                 <CardContent className="p-4">

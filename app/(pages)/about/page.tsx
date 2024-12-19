@@ -1,5 +1,33 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About ResuMate | AI-Powered CV Optimization",
+  description:
+    "Learn how ResuMate helps job seekers optimize their CVs with AI technology to pass ATS systems and land more interviews.",
+  keywords: [
+    "ResuMate",
+    "CV optimization",
+    "ATS optimization",
+    "resume builder",
+    "job search",
+    "career tools",
+  ],
+  openGraph: {
+    title: "About ResuMate | AI-Powered CV Optimization",
+    description:
+      "Learn how ResuMate helps job seekers optimize their CVs with AI technology to pass ATS systems and land more interviews.",
+    type: "website",
+    url: "https://resumateapp.com/about",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About ResuMate | AI-Powered CV Optimization",
+    description:
+      "Learn how ResuMate helps job seekers optimize their CVs with AI technology to pass ATS systems and land more interviews.",
+  },
+};
 
 export default function Component() {
   const sections = [

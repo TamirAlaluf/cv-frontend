@@ -1,5 +1,31 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Licensing | ResuMate",
+  description:
+    "ResuMate licensing terms and conditions. Learn about our software usage rights, restrictions, and intellectual property policies.",
+  keywords: [
+    "ResuMate license",
+    "software terms",
+    "usage rights",
+    "CV optimization license",
+  ],
+  openGraph: {
+    title: "Licensing | ResuMate",
+    description:
+      "ResuMate licensing terms and conditions. Learn about our software usage rights, restrictions, and intellectual property policies.",
+    type: "website",
+    url: "https://resumateapp.com/licensing",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Licensing | ResuMate",
+    description:
+      "ResuMate licensing terms and conditions. Learn about our software usage rights, restrictions, and intellectual property policies.",
+  },
+};
 
 export default function Component() {
   return (

@@ -1,5 +1,31 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | ResuMate",
+  description:
+    "ResuMate privacy policy. Learn how we collect, use, and protect your personal information when using our CV optimization service.",
+  keywords: [
+    "privacy policy",
+    "data protection",
+    "personal information",
+    "ResuMate security",
+  ],
+  openGraph: {
+    title: "Privacy Policy | ResuMate",
+    description:
+      "ResuMate privacy policy. Learn how we collect, use, and protect your personal information when using our CV optimization service.",
+    type: "website",
+    url: "https://resumateapp.com/privacy-policy",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy | ResuMate",
+    description:
+      "ResuMate privacy policy. Learn how we collect, use, and protect your personal information when using our CV optimization service.",
+  },
+};
 
 export default function Component() {
   const sections = [

@@ -47,6 +47,9 @@ export const metadata: Metadata = {
     "career tools",
     "AI resume",
   ],
+  verification: {
+    google: "google0927cc98220c4644.html",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

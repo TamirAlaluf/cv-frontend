@@ -22,10 +22,13 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
 
   // Check if the route is public first
   if (isPublicRoute(request)) {
+    console.log("public route");
+
     return NextResponse.next();
   }
 
   if (notValidRoutes(request)) {
+    console.log("not valid route");
     try {
       await auth.protect();
       return NextResponse.next();
@@ -43,6 +46,7 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
       );
     }
   } else {
+    console.log("valid route");
     return NextResponse.next();
   }
 });

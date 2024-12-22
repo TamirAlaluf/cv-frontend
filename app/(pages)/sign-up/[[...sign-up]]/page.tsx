@@ -27,7 +27,6 @@ export default function Signup() {
     <>
       <NavBar />
       <div className="flex pt-40 pb-20 h-screen w-full items-center justify-center px-4">
-        {/* Disable automatic redirection */}
         <SignUp fallbackRedirectUrl="/" />
       </div>
     </>

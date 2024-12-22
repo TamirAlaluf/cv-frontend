@@ -9,32 +9,29 @@ const isPublicRoute = createRouteMatcher([
   "/privacy-policy",
   "/licensing",
   "/tos",
+  "/api/users",
 ]);
 
+// Add these routes to match your actual app structure
 const isProtectedRoute = createRouteMatcher([
-  // "/api/(.*)",
+  "/api/(.*)",
+  // Add all your valid authenticated routes here
 ]);
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
+  if (isPublicRoute(request)) {
+    return NextResponse.next();
+  }
   if (isProtectedRoute(request)) {
-    console.log("Protected route:", request.url);
+    console.log("protected route");
     try {
-      const session = await auth.protect();
-      const headers = new Headers();
-      headers.set("x-auth-user-id", session.userId);
-      return NextResponse.next({
-        headers,
-        request: {
-          headers: request.headers,
-        },
-      });
+      await auth.protect();
+      console.log("after auth.protect");
     } catch (error) {
-      console.error("Auth error:", error);
-      return NextResponse.json(
-        {
+      return new Response(
+        JSON.stringify({
           message: "Unauthorized: You must be signed in to access this route.",
-          error: error instanceof Error ? error.message : "Unknown error",
-        },
+        }),
         {
           status: 401,
           headers: {
@@ -44,7 +41,7 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
       );
     }
   }
-
+  console.log("not protected route");
   return NextResponse.next();
 });
 export const config = {

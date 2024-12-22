@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("request", request);
     const { email, interested, tier } = await request.json();
 
     console.log("Feedback request:", { email, interested, tier });
@@ -36,7 +35,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log("Feedback created:", feedback);
     return NextResponse.json({ success: true, feedback }, { status: 201 });
   } catch (error) {
     console.error("Error saving feedback:", error);

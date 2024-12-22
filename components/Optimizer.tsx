@@ -140,7 +140,6 @@ export default function ResumeOptimizer({
 
       const data = await response.json();
       if (data.remainingUsage !== undefined) {
-        console.log("Remaining Usage:", data.remainingUsage);
         setUsageLeft(data.remainingUsage);
       }
 
@@ -156,7 +155,6 @@ export default function ResumeOptimizer({
       );
 
       const downloadUrl = URL.createObjectURL(pdfBlob);
-      console.log(downloadUrl);
       const link = document.createElement("a");
       link.style.display = "none"; // Hide the link
       link.href = downloadUrl;

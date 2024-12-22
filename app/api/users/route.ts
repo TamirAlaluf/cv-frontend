@@ -13,13 +13,11 @@ const transporter = nodemailer.createTransport({
 export async function GET(request: NextRequest) {
   try {
     const email = request.nextUrl.searchParams.get("email");
-    console.log("Email:", email);
     if (email) {
       // Find single user by username
       const user = await prisma.user.findUnique({
         where: { email },
       });
-      console.log("User:", user);
       return NextResponse.json(user);
     }
 
@@ -38,7 +36,6 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log("Webhook Body:", body);
 
     // Extract email and username
     const username = body.data?.username || null;
@@ -60,10 +57,7 @@ export async function POST(request: NextRequest) {
       data: { name: username, email, clerk_id: id },
     });
 
-    console.log("User created:", user);
     // Send a welcome email
-    console.log("username", process.env.EMAIL_USERNAME);
-    console.log("password", process.env.EMAIL_PASSWORD);
     try {
       await transporter.sendMail({
         from: process.env.EMAIL_USERNAME,

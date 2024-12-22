@@ -22,8 +22,14 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
     console.log("Protected route:", request.url);
     try {
       const session = await auth.protect();
-      console.log("Auth successful, session:", session.userId);
-      return NextResponse.next();
+      const headers = new Headers();
+      headers.set("x-auth-user-id", session.userId);
+      return NextResponse.next({
+        headers,
+        request: {
+          headers: request.headers,
+        },
+      });
     } catch (error) {
       console.error("Auth error:", error);
       return NextResponse.json(
@@ -31,12 +37,16 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
           message: "Unauthorized: You must be signed in to access this route.",
           error: error instanceof Error ? error.message : "Unknown error",
         },
-        { status: 401 }
+        {
+          status: 401,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
     }
   }
 
-  console.log("Non-protected route:", request.url);
   return NextResponse.next();
 });
 export const config = {

@@ -19,25 +19,24 @@ const isProtectedRoute = createRouteMatcher([
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
   if (isProtectedRoute(request)) {
-    console.log("protected route");
+    console.log("Protected route:", request.url);
     try {
-      await auth.protect();
-      console.log("after auth.protect");
+      const session = await auth.protect();
+      console.log("Auth successful, session:", session.userId);
+      return NextResponse.next();
     } catch (error) {
-      return new Response(
-        JSON.stringify({
-          message: "Unauthorized: You must be signed in to access this route.",
-        }),
+      console.error("Auth error:", error);
+      return NextResponse.json(
         {
-          status: 401,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+          message: "Unauthorized: You must be signed in to access this route.",
+          error: error instanceof Error ? error.message : "Unknown error",
+        },
+        { status: 401 }
       );
     }
   }
-  console.log("not protected route");
+
+  console.log("Non-protected route:", request.url);
   return NextResponse.next();
 });
 export const config = {

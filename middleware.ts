@@ -18,21 +18,11 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
-  console.log("middleware");
-
-  // Check if the route is public first
-  if (isPublicRoute(request)) {
-    console.log("public route");
-
-    return NextResponse.next();
-  }
-
   if (isProtectedRoute(request)) {
     console.log("protected route");
     try {
       await auth.protect();
       console.log("after auth.protect");
-      return NextResponse.next();
     } catch (error) {
       return new Response(
         JSON.stringify({
@@ -46,10 +36,9 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
         }
       );
     }
-  } else {
-    console.log("not valid route");
-    return NextResponse.next();
   }
+  console.log("not protected route");
+  return NextResponse.next();
 });
 export const config = {
   matcher: [

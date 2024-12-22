@@ -11,10 +11,8 @@ const isPublicRoute = createRouteMatcher([
   "/tos",
 ]);
 
-// Add these routes to match your actual app structure
 const isProtectedRoute = createRouteMatcher([
-  "/api/(.*)",
-  // Add all your valid authenticated routes here
+  // "/api/(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {

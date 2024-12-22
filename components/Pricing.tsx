@@ -53,7 +53,7 @@ export default function PricingSection() {
       price: "Free",
       description:
         "Individuals looking to optimize a couple of CVs for a specific job application.",
-      features: ["Optimize up to 5 CVs", "Basic keyword"],
+      features: ["Optimize up to 2 CVs", "Basic keyword"],
     },
     {
       name: "Basic",

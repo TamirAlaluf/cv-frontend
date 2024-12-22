@@ -12,7 +12,7 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 // Add these routes to match your actual app structure
-const notValidRoutes = createRouteMatcher([
+const isProtectedRoute = createRouteMatcher([
   "/api/(.*)",
   // Add all your valid authenticated routes here
 ]);
@@ -27,10 +27,11 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
     return NextResponse.next();
   }
 
-  if (notValidRoutes(request)) {
-    console.log("not valid route");
+  if (isProtectedRoute(request)) {
+    console.log("protected route");
     try {
       await auth.protect();
+      console.log("after auth.protect");
       return NextResponse.next();
     } catch (error) {
       return new Response(
@@ -46,7 +47,7 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
       );
     }
   } else {
-    console.log("valid route");
+    console.log("not valid route");
     return NextResponse.next();
   }
 });

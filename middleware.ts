@@ -9,7 +9,7 @@ const isPublicRoute = createRouteMatcher([
   "/privacy-policy",
   "/licensing",
   "/tos",
-  "/api/users",
+  // "/api/users",
 ]);
 
 // Add these routes to match your actual app structure
@@ -19,30 +19,9 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
-  if (isPublicRoute(request)) {
-    return NextResponse.next();
-  }
   if (isProtectedRoute(request)) {
-    console.log("protected route");
-    try {
-      await auth.protect();
-      console.log("after auth.protect");
-    } catch (error) {
-      return new Response(
-        JSON.stringify({
-          message: "Unauthorized: You must be signed in to access this route.",
-        }),
-        {
-          status: 401,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    }
+    await auth.protect();
   }
-  console.log("not protected route");
-  return NextResponse.next();
 });
 export const config = {
   matcher: [

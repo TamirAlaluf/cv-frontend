@@ -14,11 +14,11 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
+import { useState } from "react";
 export default function NavBar() {
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { href: "/#how-it-works", label: "Steps" },

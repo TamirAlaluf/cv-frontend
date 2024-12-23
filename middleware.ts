@@ -9,7 +9,7 @@ const isPublicRoute = createRouteMatcher([
   "/privacy-policy",
   "/licensing",
   "/tos",
-  // "/api/users",
+  "/api/users",
 ]);
 
 // Add these routes to match your actual app structure

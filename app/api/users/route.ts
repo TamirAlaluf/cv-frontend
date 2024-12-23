@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import nodemailer from "nodemailer";
 
@@ -13,12 +13,15 @@ const transporter = nodemailer.createTransport({
 });
 export async function GET(request: NextRequest) {
   console.log("GET request received");
-  const { userId } = await auth();
-  if (!userId) {
+  const user = await currentUser();
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const email = request.nextUrl.searchParams.get("email");
+    if (user.emailAddresses[0].emailAddress != email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     if (email) {
       // Find single user by username
       const user = await prisma.user.findUnique({
@@ -41,10 +44,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   console.log("POST request received");
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+
   try {
     const body = await request.json();
 

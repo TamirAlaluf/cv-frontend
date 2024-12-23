@@ -19,9 +19,23 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
-  if (isProtectedRoute(request)) {
-    await auth.protect();
+  if (isPublicRoute(request)) {
+    return NextResponse.next();
   }
+  if (isProtectedRoute(request)) {
+    try {
+      await auth.protect();
+    } catch (error) {
+      return new Response(
+        JSON.stringify({
+          message: "Unauthorized: You must be signed in to access this route.",
+        }),
+        { status: 401 }
+      );
+    }
+  }
+  console.log("not protected route");
+  return NextResponse.next();
 });
 export const config = {
   matcher: [

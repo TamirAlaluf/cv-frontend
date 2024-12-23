@@ -9,7 +9,7 @@ export default function MaintenancePage() {
           <div className="flex items-center justify-center mb-4">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mr-2" />
             <CardTitle className="text-3xl font-bold text-center">
-              We'll be back soon!
+              We&apos;ll be back soon!
             </CardTitle>
           </div>
         </CardHeader>
@@ -32,7 +32,7 @@ export default function MaintenancePage() {
           </div>
           <div className="flex items-center justify-center space-x-2 text-green-600">
             <CheckCircle className="h-5 w-5" />
-            <p>We're working hard to get back online!</p>
+            <p>We&apos;re working hard to get back online!</p>
           </div>
         </CardContent>
       </Card>

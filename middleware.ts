@@ -20,11 +20,7 @@ const isProtectedRoute = createRouteMatcher([
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
   if (isProtectedRoute(request)) {
-    try {
-      await auth.protect();
-    } catch (error) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    await auth.protect();
   }
 });
 export const config = {

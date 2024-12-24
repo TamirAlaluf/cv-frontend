@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload } from "lucide-react";
 import { saveAs } from "file-saver";
+import Confetti from "react-confetti";
 
 const countTokens = (text: string): number => {
   // Count all non-whitespace characters
@@ -35,6 +36,7 @@ export default function ResumeOptimizer({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [usageLeft, setUsageLeft] = useState<number | null>(null);
   const [outputFileName, setOutputFileName] = useState("optimized_resume");
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     const fetchUsageLeft = async () => {
@@ -153,7 +155,7 @@ export default function ResumeOptimizer({
         ],
         { type: "application/pdf" }
       );
-
+      setShowConfetti(true);
       const downloadUrl = URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
       link.style.display = "none"; // Hide the link
@@ -163,6 +165,9 @@ export default function ResumeOptimizer({
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(downloadUrl);
+
+      // Show confetti
+      setTimeout(() => setShowConfetti(false), 5000); // Hide after 5 seconds
     } catch (err) {
       setError("Failed to optimize resume. Please try again.");
     } finally {
@@ -171,106 +176,127 @@ export default function ResumeOptimizer({
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900 dark:to-cyan-900">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-          Resume Optimizer
-        </CardTitle>
-        {user?.username && (
-          <div className="text-sm text-blue-600 dark:text-blue-300">
-            Hello {user.username}, you have {usageLeft ?? "..."} optimizations
-            left.
+    <>
+      {showConfetti && (
+        <Confetti
+          width={window.innerWidth} // Width of the confetti canvas
+          height={window.innerHeight} // Height of the confetti canvas
+          numberOfPieces={400} // Number of confetti pieces
+          recycle={true} // Whether to keep generating new pieces
+          gravity={0.7} // Confetti falling speed (0.1 to 1)
+          colors={[
+            // Custom colors for the confetti
+            "#ff0000", // Red
+            "#00ff00", // Green
+            "#0000ff", // Blue
+            "#ffff00", // Yellow
+            "#ff00ff", // Pink
+          ]}
+          opacity={0.8} // Opacity of the confetti (0 to 1)
+          tweenDuration={5000} // How long the particles will take to disappear
+        />
+      )}
+      <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900 dark:to-cyan-900">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+            Resume Optimizer
+          </CardTitle>
+          {user?.username && (
+            <div className="text-sm text-blue-600 dark:text-blue-300">
+              Hello {user.username}, you have {usageLeft ?? "..."} optimizations
+              left.
+            </div>
+          )}
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label
+              htmlFor="job-description"
+              className="text-blue-700 dark:text-blue-300"
+            >
+              Job Description
+            </Label>
+            <Textarea
+              id="job-description"
+              placeholder="Paste the job description here..."
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+              rows={6}
+              className="resize-none bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
+            />
+            <div className="text-sm text-blue-600 dark:text-blue-300">
+              {countTokens(jobDescription)}/4000 characters
+            </div>
           </div>
-        )}
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label
-            htmlFor="job-description"
-            className="text-blue-700 dark:text-blue-300"
-          >
-            Job Description
-          </Label>
-          <Textarea
-            id="job-description"
-            placeholder="Paste the job description here..."
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            rows={6}
-            className="resize-none bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
-          />
-          <div className="text-sm text-blue-600 dark:text-blue-300">
-            {countTokens(jobDescription)}/4000 characters
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label
-            htmlFor="resume-upload"
-            className="text-blue-700 dark:text-blue-300"
-          >
-            Upload Resume (PDF)
-          </Label>
-          <div className="flex items-center space-x-2">
-            <div className="relative flex-grow">
-              <Input
-                id="resume-upload"
-                type="file"
-                accept=".pdf"
-                onChange={handleFileSelect}
-                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-              />
-              <div className="flex items-center justify-between px-4 py-2 border border-blue-200 dark:border-blue-700 rounded-md bg-white/50 dark:bg-blue-800/50 text-blue-700 dark:text-blue-300">
-                <span className="truncate">
-                  {selectedFile ? selectedFile.name : "Choose a PDF file"}
-                </span>
-                <Upload className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+          <div className="space-y-2">
+            <Label
+              htmlFor="resume-upload"
+              className="text-blue-700 dark:text-blue-300"
+            >
+              Upload Resume (PDF)
+            </Label>
+            <div className="flex items-center space-x-2">
+              <div className="relative flex-grow">
+                <Input
+                  id="resume-upload"
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleFileSelect}
+                  className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+                />
+                <div className="flex items-center justify-between px-4 py-2 border border-blue-200 dark:border-blue-700 rounded-md bg-white/50 dark:bg-blue-800/50 text-blue-700 dark:text-blue-300">
+                  <span className="truncate">
+                    {selectedFile ? selectedFile.name : "Choose a PDF file"}
+                  </span>
+                  <Upload className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="space-y-2">
-          <Label
-            htmlFor="output-filename"
-            className="text-blue-700 dark:text-blue-300"
-          >
-            Output File Name
-          </Label>
-          <Input
-            id="output-filename"
-            type="text"
-            value={outputFileName}
-            onChange={(e) => setOutputFileName(e.target.value)}
-            placeholder="Enter output file name"
-            className="bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
-          />
-        </div>
-        {error && (
-          <Alert
-            variant="destructive"
-            className="bg-red-100 dark:bg-red-900 border-red-200 dark:border-red-700"
-          >
-            <AlertDescription className="text-red-700 dark:text-red-300">
-              {error}
-            </AlertDescription>
-          </Alert>
-        )}
-      </CardContent>
-      <CardFooter>
-        <Button
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-700 dark:hover:bg-blue-600"
-          onClick={handleSubmit}
-          disabled={isLoading || !jobDescription || !selectedFile}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Optimizing...
-            </>
-          ) : (
-            "Optimize Resume"
+          <div className="space-y-2">
+            <Label
+              htmlFor="output-filename"
+              className="text-blue-700 dark:text-blue-300"
+            >
+              Output File Name
+            </Label>
+            <Input
+              id="output-filename"
+              type="text"
+              value={outputFileName}
+              onChange={(e) => setOutputFileName(e.target.value)}
+              placeholder="Enter output file name"
+              className="bg-white/50 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700 focus:border-blue-400 dark:focus:border-blue-500"
+            />
+          </div>
+          {error && (
+            <Alert
+              variant="destructive"
+              className="bg-red-100 dark:bg-red-900 border-red-200 dark:border-red-700"
+            >
+              <AlertDescription className="text-red-700 dark:text-red-300">
+                {error}
+              </AlertDescription>
+            </Alert>
           )}
-        </Button>
-      </CardFooter>
-    </Card>
+        </CardContent>
+        <CardFooter>
+          <Button
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-700 dark:hover:bg-blue-600"
+            onClick={handleSubmit}
+            disabled={isLoading || !jobDescription || !selectedFile}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Optimizing...
+              </>
+            ) : (
+              "Optimize Resume"
+            )}
+          </Button>
+        </CardFooter>
+      </Card>
+    </>
   );
 }

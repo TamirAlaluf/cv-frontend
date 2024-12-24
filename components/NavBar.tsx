@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { useAuth, useClerk } from "@clerk/nextjs";
-import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +17,6 @@ import { useState } from "react";
 export default function NavBar() {
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
-  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { href: "/#how-it-works", label: "Steps" },
@@ -77,51 +75,34 @@ export default function NavBar() {
         )}
       </div>
 
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild className="md:hidden">
-          <Button variant="outline" size="icon">
-            <Menu className="h-6 w-6" />
-            <span className="sr-only">Toggle menu</span>
+      <div className="md:hidden flex items-center space-x-2">
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavItems href="/#pricing">Pricing</NavItems>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        {!isSignedIn && (
+          <Button
+            asChild
+            variant="default"
+            className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
+          >
+            <Link href="/sign-in">Sign In</Link>
           </Button>
-        </SheetTrigger>
-        <SheetContent side="right">
-          <nav className="flex flex-col space-y-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-lg font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-            {!isSignedIn && (
-              <Button
-                asChild
-                variant="default"
-                className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
-              >
-                <Link href="/sign-in" onClick={() => setIsOpen(false)}>
-                  Login
-                </Link>
-              </Button>
-            )}
-            {isSignedIn && (
-              <Button
-                variant="default"
-                className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
-                onClick={() => {
-                  signOut();
-                  setIsOpen(false);
-                }}
-              >
-                Logout
-              </Button>
-            )}
-          </nav>
-        </SheetContent>
-      </Sheet>
+        )}
+        {isSignedIn && (
+          <Button
+            variant="default"
+            className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-md transition-all duration-200"
+            onClick={() => signOut()}
+          >
+            Logout
+          </Button>
+        )}
+      </div>
     </nav>
   );
 }

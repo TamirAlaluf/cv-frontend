@@ -1,30 +1,30 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
 model User {
   id                Int       @id @default(autoincrement())
-  name              String    
+  name              String
   email             String    @unique
-  username          String?   
-  number_usage_left Int       @default(2)
-  createdAt         DateTime  @default(now())
+  createdAt         DateTime   @default(now())
+  number_usage_left Int        @default(2)
+  username          String?
   clerk_id          String?   @unique
-
-  feedbacks         Feedback[] // One-to-many relationship
+  feedbacks         Feedback[]
 }
 
 model Feedback {
-  id        Int      @id @default(autoincrement())
-  userId    String?     // Optional relation to User
-  user      User?    @relation(fields: [userId], references: [clerk_id])
-  email     String?  // Email for anonymous users
-  interested Boolean // Indicates interest level
-  tier      String
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  userId     String?
+  email      String?
+  interested Boolean
+  createdAt  DateTime @default(now())
+  tier       String
+  user       User?    @relation(fields: [userId], references: [clerk_id])
 }

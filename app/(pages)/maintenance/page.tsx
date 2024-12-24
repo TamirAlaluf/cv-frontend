@@ -20,7 +20,7 @@ export default function MaintenancePage() {
           </p>
           <div className="flex items-center justify-center space-x-2 text-muted-foreground">
             <Tool className="h-5 w-5" />
-            <p>Estimated downtime: 2 hours</p>
+            <p>Estimated downtime: 4 hours</p>
           </div>
           <div>
             <h2 className="text-2xl font-semibold mb-2">What is ResuMate?</h2>

@@ -1,0 +1,9 @@
+Prisma schema loaded from prisma/schema.prisma
+Environment variables loaded from .env
+Datasource "db": PostgreSQL database "postgres", schema "public" at "aws-0-eu-central-1.pooler.supabase.com:5432"
+
+- Introspecting based on datasource defined in prisma/schema.prisma
+✔ Introspected 2 models and wrote them into prisma/schema.prisma in 2.56s
+      
+Run prisma generate to generate Prisma Client.
+

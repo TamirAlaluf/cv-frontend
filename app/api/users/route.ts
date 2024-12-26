@@ -23,15 +23,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     if (email) {
+      console.log("email", email);
       // Find single user by username
       const user = await prisma.user.findUnique({
         where: { email },
       });
+      console.log("user", user);
       return NextResponse.json(user);
     }
 
     // Existing code for fetching all users
     const users = await prisma.user.findMany();
+    console.log("users", users);
     return NextResponse.json(users);
   } catch (error) {
     console.log("Error fetching users:", error);

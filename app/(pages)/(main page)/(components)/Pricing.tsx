@@ -208,7 +208,7 @@ export default function PricingSection() {
     }
   };
 
-  const onApprove = async (data: any) => {
+  const onApprove = async (data: { orderID?: string }) => {
     try {
       console.log("PayPal Approval Data:", data);
 

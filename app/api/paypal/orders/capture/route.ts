@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 
-const PAYPAL_API_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://api-m.paypal.com"
-    : "https://api-m.sandbox.paypal.com";
+// const PAYPAL_API_URL =
+//   process.env.NODE_ENV === "production"
+//     ? "https://api-m.paypal.com"
+//     : "https://api-m.sandbox.paypal.com";
 
+const PAYPAL_API_URL = "https://api-m.sandbox.paypal.com";
 async function generateAccessToken() {
   const auth = Buffer.from(
     `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`

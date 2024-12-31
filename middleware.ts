@@ -1,5 +1,14 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+// Create a new ratelimiter that allows 100 requests per 15 minutes
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(100, "15 m"),
+  analytics: true,
+});
 
 const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
@@ -39,6 +48,28 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
   }
 
   if (isProtectedRoute(request)) {
+    const ip =
+      request.headers.get("x-forwarded-for") ||
+      request.headers.get("x-real-ip") ||
+      "127.0.0.1";
+    console.log("IP:", ip);
+    // Rate limit check
+    const { success } = await ratelimit.limit(ip);
+    console.log("Rate limit check:", { success });
+    if (!success) {
+      return new Response(
+        JSON.stringify({
+          message: "Too many requests, please try again later.",
+        }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     try {
       await auth.protect();
     } catch (error) {

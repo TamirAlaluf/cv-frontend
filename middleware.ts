@@ -19,11 +19,15 @@ const isPublicRoute = createRouteMatcher([
   "/licensing",
   "/tos",
   "/api/users",
+  "/api/s3/(.*)",
 ]);
 
 // Add these routes to match your actual app structure
 const isProtectedRoute = createRouteMatcher([
-  "/api/(.*)",
+  "/api/feedback",
+  "/api/optimize-resume",
+  "/api/paypal/(.*)",
+  "/api/updateUsage",
   // Add all your valid authenticated routes here
 ]);
 
@@ -42,34 +46,33 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
     return NextResponse.redirect(new URL("/404", request.url));
   }
 
+  const ip =
+    request.headers.get("x-forwarded-for") ||
+    request.headers.get("x-real-ip") ||
+    "127.0.0.1";
+  console.log("IP:", ip);
+  // Rate limit check
+  const { success } = await ratelimit.limit(ip);
+  console.log("Rate limit check:", { success });
+  if (!success) {
+    return new Response(
+      JSON.stringify({
+        message: "Too many requests, please try again later.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
   // Continue with normal auth flow
   if (isPublicRoute(request)) {
     return NextResponse.next();
   }
 
   if (isProtectedRoute(request)) {
-    const ip =
-      request.headers.get("x-forwarded-for") ||
-      request.headers.get("x-real-ip") ||
-      "127.0.0.1";
-    console.log("IP:", ip);
-    // Rate limit check
-    const { success } = await ratelimit.limit(ip);
-    console.log("Rate limit check:", { success });
-    if (!success) {
-      return new Response(
-        JSON.stringify({
-          message: "Too many requests, please try again later.",
-        }),
-        {
-          status: 429,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    }
-
     try {
       await auth.protect();
     } catch (error) {

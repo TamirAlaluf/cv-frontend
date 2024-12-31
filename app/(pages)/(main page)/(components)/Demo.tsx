@@ -1,7 +1,25 @@
 import { FileText, Upload, Zap } from "lucide-react";
-
+import { useEffect, useState } from "react";
 export default function HowItWorks() {
-  const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL;
+  const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchVideoUrl = async () => {
+      try {
+        const response = await fetch(
+          `/api/s3/get-presigned-url?key=Untitled+video+(2).mp4`
+        );
+        const data = await response.json();
+        if (data.url) {
+          setVideoUrl(data.url);
+        }
+      } catch (error) {
+        console.error("Error fetching video URL:", error);
+      }
+    };
+    fetchVideoUrl();
+  }, []);
+  
   return (
     <section className="py-20 bg-gray-50" id="how-it-works">
       <div className="container mx-auto px-4">
@@ -35,9 +53,7 @@ export default function HowItWorks() {
               src={videoUrl}
               title="How It Works Demo"
               poster="/image.png"
-            >
-              Your browser does not support the video tag.
-            </video>
+            />
           </div>
         </div>
       </div>

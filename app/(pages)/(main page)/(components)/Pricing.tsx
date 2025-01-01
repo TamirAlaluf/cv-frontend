@@ -45,7 +45,6 @@ export default function PricingSection() {
     description: "",
     variant: "default",
   });
-  const [tier, setTier] = useState<string | undefined>(undefined);
   const router = useRouter();
   const [showPayPal, setShowPayPal] = useState(false);
   const [selectedTier, setSelectedTier] = useState("");
@@ -107,7 +106,7 @@ export default function PricingSection() {
     }
 
     setSelectedTier(tier || "");
-    setShowPayPal(true);
+    setShowPayPal(process.env.NEXT_PUBLIC_SHOW_PAYPAL === "true");
     setIsModalOpen(true);
   };
 
@@ -125,7 +124,7 @@ export default function PricingSection() {
           body: JSON.stringify({
             email: email,
             interested: false,
-            tier: tier,
+            tier: selectedTier,
           }),
         });
 
@@ -168,7 +167,7 @@ export default function PricingSection() {
           body: JSON.stringify({
             email: email,
             interested: true,
-            tier: tier,
+            tier: selectedTier,
           }),
         });
 

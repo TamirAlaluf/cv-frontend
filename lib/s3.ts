@@ -1,5 +1,11 @@
 // lib/s3.ts
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
 
 export const s3Client = new S3Client({
   region: process.env.AWS_REGION,
@@ -37,6 +43,24 @@ export async function uploadToS3(
     };
   } catch (error) {
     console.error("S3 Upload Error:", error);
+    throw error;
+  }
+}
+
+
+export async function getPresignedUrl(key: string): Promise<string> {
+  console.log("AWS Region:", process.env.AWS_REGION);
+  console.log("S3 Bucket Name:", process.env.S3_BUCKET_NAME);
+
+  const command = new GetObjectCommand({
+    Bucket: process.env.S3_BUCKET_NAME!,
+    Key: key,
+  });
+
+  try {
+    return await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // 1 hour expiration
+  } catch (error) {
+    console.error("Error generating presigned URL:", error);
     throw error;
   }
 }

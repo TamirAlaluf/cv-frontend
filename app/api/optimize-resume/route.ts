@@ -18,6 +18,20 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    // validate job description under 4000 characters
+    if (job_description.length > 4000) {
+      return NextResponse.json(
+        { error: "Job description must be under 4000 characters" },
+        { status: 400 }
+      );
+    }
+    // validate pdf base64 under 5mb
+    if (pdf_base64.length > 5000000) {
+      return NextResponse.json(
+        { error: "PDF must be under 5mb" },
+        { status: 400 }
+      );
+    }
 
     // First, update usage
     const updatedUser = await prisma.user.update({

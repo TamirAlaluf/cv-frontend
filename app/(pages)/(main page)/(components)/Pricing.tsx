@@ -29,6 +29,7 @@ import {
 import { Check } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function PricingSection() {
   const { user, isLoaded } = useUser();
@@ -44,8 +45,9 @@ export default function PricingSection() {
     description: "",
     variant: "default",
   });
-  const [tier, setTier] = useState<string | undefined>(undefined);
   const router = useRouter();
+  const [showPayPal, setShowPayPal] = useState(false);
+  const [selectedTier, setSelectedTier] = useState("");
 
   const tiers = [
     {
@@ -94,12 +96,18 @@ export default function PricingSection() {
 
   const handleGetStarted = (tier?: string) => {
     if (!user) {
-      router.push("/sign-up"); // Navigate to the signup page
+      router.push("/sign-up");
       return;
     }
 
+    if (tier === "Trial") {
+      // Handle trial tier logic
+      return;
+    }
+
+    setSelectedTier(tier || "");
+    setShowPayPal(process.env.NEXT_PUBLIC_SHOW_PAYPAL === "true");
     setIsModalOpen(true);
-    setTier(tier);
   };
 
   const handleCloseModal = async () => {
@@ -116,7 +124,7 @@ export default function PricingSection() {
           body: JSON.stringify({
             email: email,
             interested: false,
-            tier: tier,
+            tier: selectedTier,
           }),
         });
 
@@ -159,7 +167,7 @@ export default function PricingSection() {
           body: JSON.stringify({
             email: email,
             interested: true,
-            tier: tier,
+            tier: selectedTier,
           }),
         });
 
@@ -180,8 +188,75 @@ export default function PricingSection() {
     }
   };
 
+  const createOrder = async () => {
+    try {
+      const response = await fetch("/api/paypal/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tier: selectedTier,
+        }),
+      });
+      const order = await response.json();
+      console.log("Order:", order);
+      return order.id;
+    } catch (error) {
+      console.error("Failed to create order:", error);
+    }
+  };
+
+  const onApprove = async (data: { orderID?: string }) => {
+    try {
+      console.log("PayPal Approval Data:", data);
+
+      if (!data.orderID) {
+        throw new Error("No orderID received from PayPal");
+      }
+
+      const response = await fetch("/api/paypal/orders/capture", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderID: data.orderID,
+          tier: selectedTier,
+        }),
+      });
+      console.log("Response:", response);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to capture payment");
+      }
+
+      const orderData = await response.json();
+      if (orderData.status === "COMPLETED") {
+        showToast(
+          "Payment Successful",
+          `Thank you for purchasing the ${selectedTier} plan!`
+        );
+        setIsModalOpen(false);
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Payment capture error:", error);
+      showToast(
+        "Error",
+        "There was a problem processing your payment.",
+        "destructive"
+      );
+    }
+  };
+
   return (
-    <>
+    <PayPalScriptProvider
+      options={{
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
+        currency: "USD",
+      }}
+    >
       <section className="py-16 bg-gray-50" id="pricing">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
@@ -236,30 +311,45 @@ export default function PricingSection() {
         </div>
 
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Excited to Get Started?</DialogTitle>
+              <DialogTitle>
+                {showPayPal
+                  ? "Complete Your Purchase"
+                  : "Excited to Get Started?"}
+              </DialogTitle>
               <DialogDescription>
-                We&apos;re currently fine-tuning this feature to make it perfect
-                for you. Be among the first to know when it&apos;s live!
+                {showPayPal
+                  ? `Complete your payment for the ${selectedTier} plan`
+                  : "We're currently fine-tuning this feature to make it perfect for you. Be among the first to know when it's live!"}
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="sm:justify-start">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={handleKeepMeUpdated}
-              >
-                Yes, Keep Me Updated!
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCloseModal}
-              >
-                No Thanks
-              </Button>
-            </DialogFooter>
+            {showPayPal ? (
+              <div className="mt-4 max-w-full">
+                <PayPalButtons
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+                  style={{ layout: "vertical" }}
+                />
+              </div>
+            ) : (
+              <DialogFooter className="sm:justify-start">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleKeepMeUpdated}
+                >
+                  Yes, Keep Me Updated!
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCloseModal}
+                >
+                  No Thanks
+                </Button>
+              </DialogFooter>
+            )}
           </DialogContent>
         </Dialog>
       </section>
@@ -281,6 +371,6 @@ export default function PricingSection() {
           )}
         </ToastViewport>
       </ToastProvider>
-    </>
+    </PayPalScriptProvider>
   );
 }

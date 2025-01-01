@@ -17,6 +17,8 @@ model User {
   username          String?
   clerk_id          String?   @unique
   feedbacks         Feedback[]
+  subscription_tier String?
+  max_usage        Int     @default(2)
 }
 
 model Feedback {

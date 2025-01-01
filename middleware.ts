@@ -27,7 +27,6 @@ const isProtectedRoute = createRouteMatcher([
   "/api/feedback",
   "/api/optimize-resume",
   "/api/paypal/(.*)",
-  "/api/updateUsage",
   // Add all your valid authenticated routes here
 ]);
 

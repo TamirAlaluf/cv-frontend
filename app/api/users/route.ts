@@ -31,15 +31,11 @@ export async function GET(request: NextRequest) {
       console.log("user", user);
       return NextResponse.json(user);
     }
-
-    // Existing code for fetching all users
-    const users = await prisma.user.findMany();
-    console.log("users", users);
-    return NextResponse.json(users);
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
   } catch (error) {
-    console.log("Error fetching users:", error);
+    console.log("Error fetching user:", error);
     return NextResponse.json(
-      { error: "Failed to fetch users" },
+      { error: "Failed to fetch user" },
       { status: 500 }
     );
   }
@@ -65,9 +61,31 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    if (!username) {
+      return NextResponse.json(
+        { error: "Username is required but not found in webhook payload" },
+        { status: 400 }
+      );
+    }
+    if (!id) {
+      return NextResponse.json(
+        { error: "Id is required but not found in webhook payload" },
+        { status: 400 }
+      );
+    }
+    //check if user exists
+    const user = await prisma.user.findUnique({
+      where: { email: email?.trim() || null },
+    });
+    if (user) {
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
+    }
 
     // Save to database
-    const user = await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: { name: username, email, clerk_id: id },
     });
 
@@ -86,7 +104,7 @@ export async function POST(request: NextRequest) {
     } catch (emailError) {
       console.error("Failed to send welcome email:", emailError);
     }
-    return NextResponse.json(user, { status: 201 });
+    return NextResponse.json(newUser, { status: 201 });
   } catch (error) {
     console.error("Error processing webhook:", error);
 

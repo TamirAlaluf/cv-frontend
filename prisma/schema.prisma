@@ -19,7 +19,6 @@ model User {
   feedbacks         Feedback[]
   subscription_tier String?
   max_usage        Int     @default(2)
-  test              String?
 }
 
 model Feedback {

@@ -8,6 +8,7 @@ import Footer from "../components/Footer";
 import { Analytics } from "@vercel/analytics/react";
 import { Exo_2 } from "next/font/google";
 import { Bricolage_Grotesque } from "next/font/google";
+import { UserProvider } from "./context/UserContext";
 
 const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -84,10 +85,12 @@ export default function RootLayout({
     <html lang="en" className={bricolageGrotesque.className}>
       <body>
         <ClerkProvider dynamic>
-          <NavBar />
-          {children}
-          <Analytics />
-          <Footer />
+          <UserProvider>
+            <NavBar />
+            {children}
+            <Analytics />
+            <Footer />
+          </UserProvider>
         </ClerkProvider>
       </body>
     </html>

@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Upload } from "lucide-react";
 import { saveAs } from "file-saver";
 import Confetti from "react-confetti";
+import { useUserContext } from "@/app/context/UserContext";
 
 const countTokens = (text: string): number => {
   // Count all non-whitespace characters
@@ -29,34 +30,18 @@ export default function ResumeOptimizer({
   LAMBDA_URL?: string;
 }) {
   const clerk = useClerk();
-  const { user } = useUser();
+  const {
+    user,
+    usageLeft,
+    setUsageLeft,
+    isLoading: isUserContextLoading,
+  } = useUserContext();
   const [jobDescription, setJobDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [usageLeft, setUsageLeft] = useState<number | null>(null);
   const [outputFileName, setOutputFileName] = useState("optimized_resume");
   const [showConfetti, setShowConfetti] = useState(false);
-
-  useEffect(() => {
-    const fetchUsageLeft = async () => {
-      if (user?.emailAddresses?.[0]?.emailAddress) {
-        try {
-          const response = await fetch(
-            `/api/users?email=${user?.emailAddresses?.[0]?.emailAddress}`
-          );
-          if (response.ok) {
-            const userData = await response.json();
-            setUsageLeft(userData?.number_usage_left ?? 0);
-          }
-        } catch (error) {
-          console.error("Failed to fetch usage count:", error);
-        }
-      }
-    };
-
-    fetchUsageLeft();
-  }, [user?.emailAddresses?.[0]?.emailAddress]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -203,8 +188,8 @@ export default function ResumeOptimizer({
           </CardTitle>
           {user?.username && (
             <div className="text-sm text-blue-600 dark:text-blue-300">
-              Hello {user.username}, you have {usageLeft ?? "..."} optimizations
-              left.
+              Hello {user.username}, you have{" "}
+              {isUserContextLoading ? "..." : usageLeft} optimizations left.
             </div>
           )}
         </CardHeader>

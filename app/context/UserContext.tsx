@@ -1,9 +1,10 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useUser, useAuth } from "@clerk/clerk-react";
+import type { UserResource } from "@clerk/types"; // Import the correct type
 
 interface UserContextType {
-  user: any;
+  user: UserResource | null | undefined;
   usageLeft: number | null;
   setUsageLeft: React.Dispatch<React.SetStateAction<number | null>>;
   isLoading: boolean;
@@ -18,11 +19,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const { isLoaded: isAuthLoaded } = useAuth();
   const [usageLeft, setUsageLeft] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
 
   useEffect(() => {
     const fetchUsageLeft = async () => {
-      // Only fetch if we don't have the email in context
+      // Only fetch if wef don't have the email in context
       if (
         isAuthLoaded &&
         isUserLoaded &&
